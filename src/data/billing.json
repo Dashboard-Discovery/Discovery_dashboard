@@ -1,0 +1,22 @@
+[
+    {
+        "project": "discovery management",
+        "role": "delivery manager",
+        "amountPerHour": "10"
+    },
+    {
+        "project": "pod tracks tpm",
+        "role": "tpm",
+        "amountPerHour": "12"
+    },
+    {
+        "project": "atve",
+        "role": "tpm",
+        "amountPerHour": "10"
+    },
+    {
+        "project": "atve",
+        "role": "sr. tech lead",
+        "amountPerHour": "15"
+    }
+]
