@@ -1,0 +1,9 @@
+.primaryBtn {
+    background-color: #16a0b6 !important;
+    border-color: #16a0b6 !important;
+    color: #fff !important;
+
+    &:hover , &:focus{
+        box-shadow: none !important;
+    }
+}
