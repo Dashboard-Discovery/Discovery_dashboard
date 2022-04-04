@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import './login.scss'
+import '../../forms.scss'
 
 async function loginUser(credentials) {
  return fetch('http://localhost:8080/login', {
@@ -53,8 +53,7 @@ export default function Login({ setToken }) {
           <input name='Username' placeholder = 'User name' type="text" onChange={e => setUserName(e.target.value)} />
           <label htmlFor='Username' ></label>
         </div>
-        <div className='Input'>
-          
+        <div className='Input'>          
           <input name='Password' placeholder = 'Password' type="password" onChange={e => setPassword(e.target.value)} />
           <label htmlFor='Password' ></label>
         </div>
@@ -69,68 +68,3 @@ export default function Login({ setToken }) {
 Login.propTypes = {
   setToken: PropTypes.func.isRequired
 };
-
-// import React, { useState } from 'react';
-// import { setUserSession } from './utils/Common';
-
-// function Login(props) {
-//   const [loading, setLoading] = useState(false);
-//   const username = useFormInput('');
-//   const password = useFormInput('');
-//   const [error, setError] = useState(null);
-
-//   // handle button click of login form
-//   const handleLogin = () => {
-//     setError(null);
-//     setLoading(true);
-//     const params = { username: username.value, password: password.value };
-//     const options = {
-//         method: 'POST',
-//         headers: {
-//           'Accept': 'application/json',
-//           'Content-Type': 'application/json'
-//         },        
-//         body:  JSON.stringify(params)  
-//     };
-//     fetch('http://localhost:4000/users/signin', options).then(response => {
-//       setLoading(false);
-//       setUserSession(response.data.token, response.data.user);
-//       props.history.push('/dashboard');
-//     }).catch(error => {
-//       setLoading(false);
-//       console.log(error);
-//       if (error.response.status === 401) setError(error.response.data.message);
-//       else setError("Something went wrong. Please try again later.");
-//     });
-//   }
-
-//   return (
-//     <div>
-//       Login<br /><br />
-//       <div>
-//         Username<br />
-//         <input type="text" {...username} autoComplete="new-password" />
-//       </div>
-//       <div style={{ marginTop: 10 }}>
-//         Password<br />
-//         <input type="password" {...password} autoComplete="new-password" />
-//       </div>
-//       {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
-//       <input type="button" value={loading ? 'Loading...' : 'Login'} onClick={handleLogin} disabled={loading} /><br />
-//     </div>
-//   );
-// }
-
-// const useFormInput = initialValue => {
-//   const [value, setValue] = useState(initialValue);
-
-//   const handleChange = e => {
-//     setValue(e.target.value);
-//   }
-//   return {
-//     value,
-//     onChange: handleChange
-//   }
-// }
-
-// export default Login;

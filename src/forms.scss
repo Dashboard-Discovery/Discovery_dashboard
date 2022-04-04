@@ -1,11 +1,5 @@
 @charset "UTF-8";
 @import 'https://fonts.googleapis.com/css?family=Noto+Sans';
-body {
-  background: radial-gradient(ellipse farthest-corner at center top, #d8dbe2 0%, #a9bcd0 100%);
-  height: 100vh;
-  font-family: "Noto Sans", sans-serif;
-  background-image: linear-gradient(to right, #DECBA4, #FFF);
-}
 
 .Modal {
   position: absolute;
@@ -26,6 +20,7 @@ body {
   margin: 4px 0 10px 0;
   margin: 10px;
 }
+
 .Modal a:hover {
   text-decoration: underline;
 }
