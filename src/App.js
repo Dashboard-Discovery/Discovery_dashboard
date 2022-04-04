@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import Login from './components/login/login';
 import Dashboard from './dashboard';
 import Home from './home';
-
-import { getToken, removeUserSession, setUserSession } from './utils/Common';
 import useToken from './utils/useToken';
 
 import './App.scss';
-
-
 
 function App() {
 
@@ -24,7 +20,8 @@ function App() {
         <div>
           <div className="header">
             <NavLink exact="true" className="active" to="/">Home</NavLink>
-            <NavLink className="active" to="/dashboard">Dashboard</NavLink>
+            <NavLink className="active" to="/dashboard">Dashboard
+            </NavLink>
           </div>
           <div className="content">
             <Routes>
