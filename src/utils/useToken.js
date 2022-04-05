@@ -19,3 +19,8 @@ export default function useToken() {
     token
   }
 }
+export const getTokenNow = () => {
+  const tokenString = sessionStorage.getItem('token');
+  const userToken = JSON.parse(tokenString);
+  return userToken?.token
+};

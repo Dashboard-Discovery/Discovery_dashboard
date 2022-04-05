@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import Login from './components/login/login';
 import Dashboard from './dashboard';
 import Home from './home';
+import DashHome from './components/AdminDash/DashHome/DashHome';
+
+import { getToken, removeUserSession, setUserSession } from './utils/Common';
 import useToken from './utils/useToken';
 
 import './App.scss';
@@ -16,7 +19,7 @@ function App() {
   }
   return (
     <div className="App">
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <div>
           <div className="header">
             <NavLink exact="true" className="active" to="/">Home</NavLink>
@@ -30,7 +33,9 @@ function App() {
             </Routes>
           </div>
         </div>
-      </BrowserRouter>
+      </BrowserRouter> */}
+      <DashHome/>
+
     </div>
   );
 }

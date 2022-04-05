@@ -21,6 +21,7 @@ import AddEditForm from './resourceForm';
 import * as FileSaver from 'file-saver';
 import "jspdf-autotable";
 import styles from './grid.module.scss';
+import { getResourceByEmployeeNumber } from '../Service/service';
 
 const resources = require('../../data/resourceDetails.json');
 
@@ -67,6 +68,11 @@ export default function ResourceGrid() {
         setTotalPages(Math.ceil(resources.length / rowsPerPage));
         setCurrentData(resources.slice(((currentpage - 1) * rowsPerPage), (rowsPerPage * currentpage)));
     }, [resources, currentpage, rowsPerPage]);
+
+    useEffect(()=>{
+     const data= getResourceByEmployeeNumber('1234');
+     console.log('data getting is',data)
+    })
     const dataStringLines = resources;
     const headers = Object.keys(dataStringLines[0]);
 

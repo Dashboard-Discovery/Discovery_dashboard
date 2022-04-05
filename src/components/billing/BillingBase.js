@@ -8,15 +8,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DenseAppBar from '../headerComponent/DenseAppBar'
 import Pagination from '@mui/material/Pagination';
-import { useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import AddEditForm from '../addEditForm/AddEditForm';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
+import { useState,useEffect } from 'react';
+import EditForm from '../FormComponent/EditForm'
 
 const BillingBase = () => {
   const billingData = require('../../data/workTime.json');
@@ -25,6 +19,7 @@ const BillingBase = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [open, setOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState({})
+  const [formType,setFormType]=useState('add');
   useEffect(() => {
     console.log('page calculation', currentpage)
     setCurrentRow(billingData[0])
@@ -34,24 +29,20 @@ const BillingBase = () => {
   const onChangeHandler = (
     event
   ) => {
-    console.log('event catched', event)
     setCurrentPage(event.target.value);
   };
   const handleEditClick = (data) => {
-    console.log('data on edit click ', data)
     setCurrentRow(data)
+    setFormType('edit');
     setOpen(true);
 
   }
-  const handleClose = () => {
-    setOpen(false);
-  }
 
 
-  return (<>
-    <DenseAppBar title={'Time Sheet'} />
+  return (<div style={{width:'80%'}}>
+    <DenseAppBar title={'Time Sheet'} style={{width:'100%'}}/>
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: '100%' }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Employee ID</TableCell>
@@ -79,19 +70,9 @@ const BillingBase = () => {
         page={currentpage}
         onChange={(e) => { setCurrentPage(e.target.value) }} />
     </TableContainer>
-    <Dialog open={open} onClose={handleClose}>
-      <DialogContent>
-        <FormControl >
-          <AddEditForm formData={currentRow} />
-        </FormControl>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleClose}>Update</Button>
-      </DialogActions>
-    </Dialog>
+    <EditForm formType={'edit'} currentRow={currentRow} open={open} setOpen={setOpen}/>
 
-  </>)
+  </div>)
 }
 
 export default BillingBase;
