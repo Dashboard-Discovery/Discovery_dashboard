@@ -29,7 +29,8 @@ export default function ResourceGrid() {
     }, [resources, currentpage, rowsPerPage]);
 
     useEffect(()=>{
-      getResourceByEmployeeNumber('1234')
+     const data= getResourceByEmployeeNumber('1234');
+     console.log('data getting is',data)
     })
     const dataStringLines = resources;
     const headers = Object.keys(dataStringLines[0]);

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './login.scss'
 
 async function loginUser(credentials) {
- return fetch('http://localhost:8080/login', {
+ return fetch('http://10.75.80.111:8423/billing/v1/admin/authenticate', {
    method: 'POST',
    headers: {
       'Accept': 'application/json',
@@ -24,7 +24,7 @@ export default function Login({ setToken }) {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const params = { username: username, password: password };
+    const params = { emailId: 'jesi1@tataelxsi.co.in', password: 'Pass123' };
     // const options = {
     //      method: 'POST',
     //     headers: {
