@@ -17,7 +17,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
-import AddEditForm from './resourseForm';
+import AddEditForm from './resourceForm';
 import * as FileSaver from 'file-saver';
 import "jspdf-autotable";
 import styles from './grid.module.scss';
@@ -63,8 +63,7 @@ export default function ResourceGrid() {
     const [isUpdate, setIsUpdate] = useState(false);
 
     const rowsPerPage = 10;
-    useEffect(() => {
-        console.log('page calculation', currentpage)
+    useEffect(() => {       
         setTotalPages(Math.ceil(resources.length / rowsPerPage));
         setCurrentData(resources.slice(((currentpage - 1) * rowsPerPage), (rowsPerPage * currentpage)));
     }, [resources, currentpage, rowsPerPage]);
@@ -108,16 +107,16 @@ export default function ResourceGrid() {
         setOpen(false);
     };
 
-    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    const fileExtension = '.xlsx';
+    
 
-    const exportToCSV = (csvData, fileName) => {
-        const ws = XLSX.utils.json_to_sheet(csvData);
+    const exportToCSV = (fileName) => {
+        const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+        const fileExtension = '.xlsx';
+        const ws = XLSX.utils.json_to_sheet(resources);
         const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
         const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
         const data = new Blob([excelBuffer], { type: fileType });
-
-        FileSaver.saveAs(data, fileName + fileExtension);
+        FileSaver.saveAs(data, 'resource_details' + fileExtension);
     }
 
     const handleAddClick = () => {
@@ -135,7 +134,7 @@ export default function ResourceGrid() {
                 >Add Row</button>
                 <button
                     className={`mx-4 align-self-end ${styles.primaryBtn}`}
-                    onClick={exportToCSV(resources, 'resourceDetails')}
+                    onClick={exportToCSV}
                 >Export to Excel</button>
                 <button
                     className={`mx-4 align-self-end ${styles.primaryBtn}`}
