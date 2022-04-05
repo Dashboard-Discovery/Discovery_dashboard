@@ -37,7 +37,7 @@ class Input extends React.Component {
   render() {
     return <div className='Input'>
               <input type={ this.props.type } name={ this.props.name } defaultValue={this.props.value} placeholder={ this.props.placeholder }/>
-              <label for={ this.props.name } ></label>
+              <label htmlFor={ this.props.name }>{ this.props.placeholder }</label>
            </div>
   }
 }
