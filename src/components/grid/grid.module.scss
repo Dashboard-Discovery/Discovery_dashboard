@@ -11,16 +11,22 @@
 .form_wrapper {    
     padding: 20px;
 
-    & input , label {
-        color: #333;
+    & input {
+        color: #333 !important;
     }
 
     & label {
+        color: #333;
         font-weight: bold;
     }
 
 }
+.resources {
+    display: grid;
 
-.resources th {
-    font-weight: bold;    
+    & th {
+        font-weight: bold;  
+        font-size: 11px;
+        line-height: 13px;  
+    }
 }

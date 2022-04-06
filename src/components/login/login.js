@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import '../../forms.scss'
 
 async function loginUser(credentials) {
  return fetch('http://10.75.80.111:8423/billing/v1/admin/authenticate', {
@@ -13,7 +12,7 @@ async function loginUser(credentials) {
  })
    .then(data => data.json())
    .catch(error => {      
-      if (error.response.status === 401) console.log(error.response.data.message);
+      if (error.response?.status === 401) console.log(error.response.data.message);
       else console.log("Something went wrong. Please try again later.");
     })
 }
@@ -42,7 +41,8 @@ export default function Login({ setToken }) {
     //   else console.log("Something went wrong. Please try again later.");
     // });
     const token = await loginUser(params);
-    setToken(token);
+    if(token)
+     setToken(token);
   }
 
   return(
@@ -65,6 +65,6 @@ export default function Login({ setToken }) {
   )
 }
 
-Login.propTypes = {
-  setToken: PropTypes.func.isRequired
-};
+// Login.propTypes = {
+//   setToken: PropTypes.func.isRequired
+// };

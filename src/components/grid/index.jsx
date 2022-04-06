@@ -22,6 +22,7 @@ import * as FileSaver from 'file-saver';
 import "jspdf-autotable";
 import styles from './grid.module.scss';
 import { getResourceByEmployeeNumber } from '../Service/service';
+//import DataTable from 'react-data-table-component';
 
 const resources = require('../../data/resourceDetails.json');
 
@@ -113,8 +114,6 @@ export default function ResourceGrid() {
         setOpen(false);
     };
 
-    
-
     const exportToCSV = (fileName) => {
         const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
         const fileExtension = '.xlsx';
@@ -133,17 +132,17 @@ export default function ResourceGrid() {
     return (
         <div className={styles.resources}>
             <DenseAppBar title={'Resource Details'} />
-            <div className='d-flex flex-row'>
+            <div className='d-flex flex-row py-2'>
                 <button
-                    className={`${styles.primaryBtn}`}
+                    className={`${styles.primaryBtn} px-2 ml-2`}
                     onClick={handleAddClick}
                 >Add Row</button>
                 <button
-                    className={`mx-4 align-self-end ${styles.primaryBtn}`}
+                    className={`mx-4 px-2 align-self-end ${styles.primaryBtn}`}
                     onClick={exportToCSV}
                 >Export to Excel</button>
                 <button
-                    className={`mx-4 align-self-end ${styles.primaryBtn}`}
+                    className={`px-2 align-self-end ${styles.primaryBtn}`}
                     onClick={downloadPdf}
                 >
                     Pdf
@@ -199,7 +198,7 @@ export default function ResourceGrid() {
                                 <TableCell>{row.competency}</TableCell>
                                 <TableCell align="right">{row.source}</TableCell>
                                 <TableCell align="right">{row.grade}</TableCell>
-                                <TableCell><button className='border-0'><EditIcon onClick={(e) => handleEditClick(row)} /></button></TableCell>
+                                <TableCell><button><EditIcon onClick={(e) => handleEditClick(row)} /></button></TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
