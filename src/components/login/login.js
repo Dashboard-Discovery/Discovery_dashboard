@@ -23,7 +23,7 @@ export default function Login({ setToken }) {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const params = { emailId: 'jesi1@tataelxsi.co.in', password: 'Pass123' };
+    const params = { emailId: username, password: password };
     // const options = {
     //      method: 'POST',
     //     headers: {
