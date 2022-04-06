@@ -8,49 +8,100 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { saveTimeSheetEntry } from '../Service/service';
 
 
 
-export default function EditForm({currentRow,formType,open,setOpen}) {
+export default function EditForm({currentRow,formType,open,setOpen,handleReload}) {
 
   const handleClose = () => {
     setOpen(false);
+
   }
   const [currentMonth,setCurrentMonth]=useState('');
   const [currentYear,setCurrentYear]=useState('')
+  const [empNo,setEmpNo]=useState('');
+  const [project,setProject]=useState('');
+  const [plannedWrkDys,setPlannedWrkDys]=useState('0');
+  const [actualWrkDys,setActualWrkDys]=useState('0');
+  const [amount,setAmount]=useState('0');
+
   const monthData=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
   useEffect(()=>{
     let splitted=currentRow?.month?.split('-');
     if(splitted){
-      const monthCurr=monthData[splitted[0]-1];
+      const monthCurr=monthData[Number(splitted[0])-1];
       setCurrentMonth(monthCurr);
       setCurrentYear(splitted[1]);
     }
 
   },[currentRow])
-  const handleChange=()=>{
+  const handleChangeMonth=(e)=>{
+    setCurrentMonth(e.target.value)
 
   }
-  const handleChangeYear=()=>{
-
+  const handleChangeYear=(e)=>{
+     setCurrentYear(e.target.value);
+  }
+  const handleEmpNo=(e)=>{
+    setEmpNo(e.target.value)
+  }
+  const handleProject=(e)=>{
+    setProject(e.target.value)
+  }
+  const handlePlannedDays=(e)=>{
+    setPlannedWrkDys(e.target.value);
+  }
+  const handleActualDays=(e)=>{
+    setActualWrkDys(e.target.value);
+  }
+  const handleAmount=(e)=>{
+    setAmount(e.target.value);
+  }
+  const handleSaveOrUpdate=()=>{
+    console.log('saving data...........................')
+    const data={
+      "empNo":empNo,
+      "projectName":project,
+      "month":`${currentMonth}-${currentYear}`,
+      "plannedWrkDys":plannedWrkDys,
+      "actualWrkDys":actualWrkDys,  
+      }
+      if(formType!=='edit'){
+        const response=saveTimeSheetEntry(data);
+        if(response==='200' || 'OK'){
+          setOpen(false);
+          handleReload();
+        }
+      }
   }
   return (
 
 
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose} >
     <DialogContent>
     <FormControl>
     <TextField
       id="outlined-name"
       label="Employee Number"
-      value={`${formType==='edit'?currentRow.empNo:'' }`}
-      disabled={true}
+      value={`${formType==='edit'?currentRow?.empNo:empNo }`}
+      disabled={formType=='edit'? true:false}
       style={{ paddingBottom: '10%' }}
+      onChange={(e)=>handleEmpNo(e)}
     />
+          <Select
+          label="project"
+        value={`${formType==='edit'?currentRow?.projectName:project }`}
+        onChange={(e)=>{handleProject(e)}}
+        style={{marginRight:'20%',width:'100%',color:'black',marginBottom:'10%'}}
+      >
+        <MenuItem value={'ATVE'}>Discovery ATVE</MenuItem>
+        <MenuItem value={'ATVE2'}>Discovery ATVE2</MenuItem>
+      </Select>
     <span style={{paddingBottom:'10%'}}>
       <Select
         value={currentMonth}
-        onChange={handleChange}
+        onChange={(e)=>{handleChangeMonth(e)}}
         style={{marginRight:'20%',width:'40%'}}
       >
         <MenuItem value={'Jan'}>Jan</MenuItem>
@@ -67,8 +118,8 @@ export default function EditForm({currentRow,formType,open,setOpen}) {
         <MenuItem value={'Dec'}>Dec</MenuItem>
       </Select>
       <Select
-        value={`${formType==='edit'?currentYear :'2020'}`}
-        onChange={handleChangeYear}
+        value={`${formType==='edit'?currentYear :currentYear}`}
+        onChange={(e)=>handleChangeYear(e)}
         style={{width:'40%'}}
       >
         <MenuItem value={'2018'}>2018</MenuItem>
@@ -82,16 +133,33 @@ export default function EditForm({currentRow,formType,open,setOpen}) {
       </span>
     <TextField
       id="outlined-name"
-      label="Working Days"
-      value={`${formType==='edit'?currentRow.workingDays:''}`}
+      label="Planned Working Days"
+      value={`${formType==='edit'?currentRow?.plannedWrkDys:plannedWrkDys}`}
+      onChange={(e)=>handlePlannedDays(e)}
+      style={{marginBottom:'10%'}}
 
     />
+        <TextField
+      id="outlined-name"
+      label="Actual Working Days"
+      value={`${formType==='edit'?currentRow?.actualWrkDys:actualWrkDys}`}
+      onChange={(e)=>{handleActualDays(e)}}
+      style={{marginBottom:'10%'}}
 
+    />
+        <TextField
+      id="outlined-name"
+      label="Amount"
+      value={`${formType==='edit'?currentRow?.amount:amount}`}
+      onChange={(e)=>{handleAmount(e)}}
+      style={{marginBottom:'10%'}}
+
+    />
   </FormControl>
     </DialogContent>
     <DialogActions>
       <Button onClick={handleClose}>Cancel</Button>
-      <Button onClick={handleClose}>Update</Button>
+      <Button onClick={handleSaveOrUpdate}>Save</Button>
     </DialogActions>
   </Dialog>
   
