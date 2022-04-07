@@ -1,6 +1,5 @@
-import axios from 'axios';
-import { json } from 'body-parser';
 import { getTokenNow } from '../../utils/useToken';
+import { SERVERURL } from '../../utils/constants';
 
 export const getResourceByEmployeeNumber = (employeeNumber) => {
 
@@ -8,14 +7,13 @@ export const getResourceByEmployeeNumber = (employeeNumber) => {
     const tokenNow = `Bearer ${getTokenNow()}`;
     console.log('token now is', tokenNow)
 
-    fetch('http://10.75.80.111:8423/billing/v1/admin/resource', {
+    fetch({ SERVERURL } + '/billing/v1/admin/resource', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': tokenNow
         },
-
     })
         .then((res) => {
             console.log('data', res.json())
@@ -27,10 +25,10 @@ export const getResourceByEmployeeNumber = (employeeNumber) => {
 }
 
 
-export  const getAllTimesheet=async ()=>{
-     const tokenNow = await `Bearer ${getTokenNow()}`;
+export const getAllTimesheet = async () => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
     console.log('token now is', tokenNow)
-    const response =await fetch(`http://10.75.80.111:8423/billing/v1/admin/timesheet?projectname=ATVE`, {
+    const response = await fetch(`http://10.75.80.111:8423/billing/v1/admin/timesheet?projectname=ATVE`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -39,27 +37,63 @@ export  const getAllTimesheet=async ()=>{
         },
 
     });
-    const data= await response.json();
-    return  data;
-       
+    const data = await response.json();
+    return data;
+
 
 }
-export  const saveTimeSheetEntry=async (data)=>{
+export const saveTimeSheetEntry = async (data) => {
     const tokenNow = await `Bearer ${getTokenNow()}`;
-   console.log('token now is', tokenNow)
+    console.log('token now is', tokenNow)
 
-   const response =await fetch("http://10.75.80.111:8423/billing/v1/admin/timesheet", {
-       method: 'POST',
-       headers: {
-           'Accept': 'application/json',
-           'Content-Type': 'application/json',
-           'Authorization': tokenNow
-       },
-       body:JSON.stringify(data)
+    const response = await fetch("http://10.75.80.111:8423/billing/v1/admin/timesheet", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
 
-   });
-   console.log('saving statussssssssssssssssssssssssssssssssssssssssssssssss',response);
-   return  response.status;
-      
+    });
+    console.log('saving statussssssssssssssssssssssssssssssssssssssssssssssss', response);
+    return response.status;
 
+
+}
+
+
+export const getAllResources = async () => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+
+    });
+    const data = await response.json();
+    return data;
+
+
+}
+
+export const saveResource = async (data) => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+
+    const response = await fetch("http://10.75.80.111:8423/billing/v1/admin/resource", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
+
+    });
+    return response.status;
 }

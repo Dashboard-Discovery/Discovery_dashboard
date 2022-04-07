@@ -22,11 +22,25 @@
 
 }
 .resources {
-    display: grid;
 
     & th {
         font-weight: bold;  
         font-size: 11px;
         line-height: 13px;  
+    }
+
+}
+
+
+.toolbar_buttons {
+    align-self: center;
+    right: 10px;
+    position: absolute;
+    .add_entry {
+        background: #fff;
+
+        &:focus ,&:hover  {
+            background-color: #fff !important;
+        }
     }
 }
