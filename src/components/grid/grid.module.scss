@@ -25,12 +25,16 @@
 
     & th {
         font-weight: bold;  
-        font-size: 11px;
-        line-height: 13px;  
+        min-width: 100px;
+        line-height: 15px;
+        background-color: #eee;  
     }
 
 }
 
+.table_container {
+    border-radius: 0px !important;
+}
 
 .toolbar_buttons {
     align-self: center;

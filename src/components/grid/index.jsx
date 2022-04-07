@@ -28,6 +28,7 @@ import { excelIcon } from '../icons';
 //import DataTable from 'react-data-table-component';
 
 import styles from './grid.module.scss';
+import { StyledEngineProvider } from '@mui/styled-engine-sc';
 
 export default function ResourceGrid() {
     const [resources, setResources] = useState([]);
@@ -143,7 +144,7 @@ export default function ResourceGrid() {
                 data={dataStringLines}
             /> */}
 
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} className={styles.table_container}>
                 <Table sx={{ minWidth: 650 }}>
                     <TableHead>
                         <TableRow>
@@ -170,7 +171,7 @@ export default function ResourceGrid() {
                         {resources && resources.map((row) => (
                             <TableRow key={row?.id}
                             >
-                                <TableCell>{row.project}</TableCell>
+                                <TableCell>{row.projectName}</TableCell>
                                 <TableCell align="right">{row.empNo}</TableCell>
                                 <TableCell>{row.name}</TableCell>
                                 <TableCell>{row.role}</TableCell>

@@ -136,3 +136,20 @@ export const saveResource = async (data) => {
     });
     return response.status;
 }
+
+export const updateResource = async (data, id) => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
+
+    });
+    return response.status;
+}
