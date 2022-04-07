@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { getTokenNow } from '../../utils/useToken';
+import { SERVERURL } from '../../utils/constants';
 
 export const getResourceByEmployeeNumber = (employeeNumber) => {
 
@@ -100,6 +100,58 @@ export  const getAllProjects=async ()=>{
       
       
 
+}
+
+export const getAllResources = async () => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+
+    });
+    const data = await response.json();
+    return data;
+
+
+}
+
+export const saveResource = async (data) => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
+
+    });
+    return response.status;
+}
+
+export const updateResource = async (data, id) => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
+
+    });
+    return response.status;
 }
 
 export const getBilling=async()=>{
