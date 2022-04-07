@@ -8,14 +8,15 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { saveTimeSheetEntry } from '../Service/service';
+import { getAllProjects, saveTimeSheetEntry, updateTimeSheetEntry } from '../Service/service';
 
 
 
-export default function EditForm({currentRow,formType,open,setOpen,handleReload}) {
+export default function EditForm({currentRow,formType,open,setOpen,handleReload,setFormType}) {
 
   const handleClose = () => {
     setOpen(false);
+    setFormType('')
 
   }
   const [currentMonth,setCurrentMonth]=useState('');
@@ -25,17 +26,40 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload}
   const [plannedWrkDys,setPlannedWrkDys]=useState('0');
   const [actualWrkDys,setActualWrkDys]=useState('0');
   const [amount,setAmount]=useState('0');
+  const [projectList,setProjectList]=useState([])
 
   const monthData=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
   useEffect(()=>{
-    let splitted=currentRow?.month?.split('-');
-    if(splitted){
-      const monthCurr=monthData[Number(splitted[0])-1];
-      setCurrentMonth(monthCurr);
-      setCurrentYear(splitted[1]);
+    if(formType==='edit'){
+      let splitted=currentRow?.month?.split('-');
+      if(splitted){
+        const monthCurr=monthData[Number(splitted[0])-1];
+        setCurrentMonth(monthCurr);
+        setCurrentYear(splitted[1]);
+      }
+      setProject(currentRow?.projectName);
+      setPlannedWrkDys(currentRow?.plannedWrkDys);
+      setActualWrkDys(currentRow?.actualWrkDys);
+      setEmpNo(currentRow?.empNo)
+    }else if(formType==='add'){
+      setProject('');
+      setPlannedWrkDys('');
+      setActualWrkDys('');
+      setEmpNo('')
+      setCurrentMonth('');
+      setCurrentYear('');
     }
 
-  },[currentRow])
+
+  },[currentRow,open])
+  useEffect(async()=>{
+    const responseProject= await getAllProjects();                                                                                                                                                                                  
+    setProjectList(responseProject);
+    console.log('project list is',projectList)                                                                                                                                                                        
+  },[])
+
+  console.log('project list is',projectList)
+  projectList.map((item)=>{console.log('item here is',item.id)})
   const handleChangeMonth=(e)=>{
     setCurrentMonth(e.target.value)
 
@@ -60,12 +84,19 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload}
   }
   const handleSaveOrUpdate=()=>{
     console.log('saving data...........................')
-    const data={
+    let data={
       "empNo":empNo,
       "projectName":project,
       "month":`${currentMonth}-${currentYear}`,
       "plannedWrkDys":plannedWrkDys,
       "actualWrkDys":actualWrkDys,  
+      }
+      if(formType =='edit'){
+        const response=updateTimeSheetEntry(data,currentRow?.id);
+        if(response ==='200' || 'OK'){
+          setOpen(false);
+          handleReload();
+        }
       }
       if(formType!=='edit'){
         const response=saveTimeSheetEntry(data);
@@ -75,28 +106,32 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload}
         }
       }
   }
+
   return (
-
-
+  
     <Dialog open={open} onClose={handleClose} >
     <DialogContent>
     <FormControl>
     <TextField
-      id="outlined-name"
+      id="outlined-basic"
+      variant='outlined'
       label="Employee Number"
+
       value={`${formType==='edit'?currentRow?.empNo:empNo }`}
       disabled={formType=='edit'? true:false}
-      style={{ paddingBottom: '10%' }}
+      style={{ paddingBottom: '10%',textAlign:'center' }}
       onChange={(e)=>handleEmpNo(e)}
     />
           <Select
           label="project"
-        value={`${formType==='edit'?currentRow?.projectName:project }`}
+        value={project}
         onChange={(e)=>{handleProject(e)}}
         style={{marginRight:'20%',width:'100%',color:'black',marginBottom:'10%'}}
       >
-        <MenuItem value={'ATVE'}>Discovery ATVE</MenuItem>
-        <MenuItem value={'ATVE2'}>Discovery ATVE2</MenuItem>
+        {projectList &&(projectList.map((item)=>{
+         return <MenuItem key={item?.id}value={item.projectName}>{item.projectName}</MenuItem>
+        }))}
+
       </Select>
     <span style={{paddingBottom:'10%'}}>
       <Select
@@ -118,7 +153,7 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload}
         <MenuItem value={'Dec'}>Dec</MenuItem>
       </Select>
       <Select
-        value={`${formType==='edit'?currentYear :currentYear}`}
+        value={currentYear}
         onChange={(e)=>handleChangeYear(e)}
         style={{width:'40%'}}
       >
@@ -134,7 +169,7 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload}
     <TextField
       id="outlined-name"
       label="Planned Working Days"
-      value={`${formType==='edit'?currentRow?.plannedWrkDys:plannedWrkDys}`}
+      value={plannedWrkDys}
       onChange={(e)=>handlePlannedDays(e)}
       style={{marginBottom:'10%'}}
 
@@ -142,7 +177,7 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload}
         <TextField
       id="outlined-name"
       label="Actual Working Days"
-      value={`${formType==='edit'?currentRow?.actualWrkDys:actualWrkDys}`}
+      value={actualWrkDys}
       onChange={(e)=>{handleActualDays(e)}}
       style={{marginBottom:'10%'}}
 
@@ -150,7 +185,7 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload}
         <TextField
       id="outlined-name"
       label="Amount"
-      value={`${formType==='edit'?currentRow?.amount:amount}`}
+      value={amount}
       onChange={(e)=>{handleAmount(e)}}
       style={{marginBottom:'10%'}}
 
@@ -159,7 +194,7 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload}
     </DialogContent>
     <DialogActions>
       <Button onClick={handleClose}>Cancel</Button>
-      <Button onClick={handleSaveOrUpdate}>Save</Button>
+      <Button onClick={handleSaveOrUpdate}>{formType==='edit'?'Update':'Save'}</Button>
     </DialogActions>
   </Dialog>
   
