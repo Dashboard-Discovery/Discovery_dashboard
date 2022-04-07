@@ -4,6 +4,7 @@ import "./styles.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ResourceGrid from "../../grid";
 import BillingBase from "../../billing/BillingBase";
+import BaseBilling from "../../BaseBilling";
 
  const DashHome=()=> {
   return (
@@ -18,6 +19,7 @@ import BillingBase from "../../billing/BillingBase";
            <Route path="/timesheet">
              <BillingBase/>
            </Route>
+           <Route path="/billing"><BaseBilling/></Route>
           </Switch>
         </div>
     </Router>

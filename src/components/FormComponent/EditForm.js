@@ -25,7 +25,6 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload,
   const [project,setProject]=useState('');
   const [plannedWrkDys,setPlannedWrkDys]=useState('0');
   const [actualWrkDys,setActualWrkDys]=useState('0');
-  const [amount,setAmount]=useState('0');
   const [projectList,setProjectList]=useState([])
 
   const monthData=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -78,9 +77,6 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload,
   }
   const handleActualDays=(e)=>{
     setActualWrkDys(e.target.value);
-  }
-  const handleAmount=(e)=>{
-    setAmount(e.target.value);
   }
   const handleSaveOrUpdate=()=>{
     console.log('saving data...........................')
@@ -179,14 +175,6 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload,
       label="Actual Working Days"
       value={actualWrkDys}
       onChange={(e)=>{handleActualDays(e)}}
-      style={{marginBottom:'10%'}}
-
-    />
-        <TextField
-      id="outlined-name"
-      label="Amount"
-      value={amount}
-      onChange={(e)=>{handleAmount(e)}}
       style={{marginBottom:'10%'}}
 
     />

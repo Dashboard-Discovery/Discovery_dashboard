@@ -11,15 +11,8 @@ import {
     LineStyle,
     Timeline,
     TrendingUp,
-    Group,
-    Info,
-    Storefront,
-    AttachMoney,
-    BarChart,
-    MailOutline,
-    DynamicFeed,
-    ChatBubbleOutline,
-    WorkOutline
+    AttachMoney
+
   } from "@material-ui/icons";
   import { Link } from "react-router-dom";
   
@@ -29,6 +22,7 @@ import {
         <Wrapper>
           <SidebarMenu className="test-class-side">
             <Title>Dashboard</Title>
+            <List>
             <List>               
               <Link to='/timesheet'>
               <ListItem>
@@ -42,12 +36,14 @@ import {
                 <div>Resource Details</div>
               </ListItem>
               </Link>
-              {/* <Link to="/users" className="link">
+              <Link to="/billing" className="link">
                 <ListItem>
-                  <Group className="icon" />
-                  <div>Users</div>
+                  <AttachMoney className="icon" />
+                  <div>Billing</div>
                 </ListItem>
-              </Link> */}
+              </Link>
+            </List>
+   
             </List>
             {/* <Title>Quick Menu</Title>
             <List>
