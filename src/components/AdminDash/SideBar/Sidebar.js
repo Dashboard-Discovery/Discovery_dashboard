@@ -29,11 +29,7 @@ import {
         <Wrapper>
           <SidebarMenu className="test-class-side">
             <Title>Dashboard</Title>
-            <List>
-                <ListItem>
-                  <LineStyle className="icon" />
-                  <div>Home</div>
-                </ListItem>
+            <List>               
               <Link to='/timesheet'>
               <ListItem>
                 <Timeline className="icon" />
@@ -53,7 +49,7 @@ import {
                 </ListItem>
               </Link> */}
             </List>
-            <Title>Quick Menu</Title>
+            {/* <Title>Quick Menu</Title>
             <List>
               <ListItem>
                 <Info className="icon" />
@@ -72,9 +68,9 @@ import {
               {/* <ListItem>
                 <BarChart className="icon" />
                 <div>Reports</div>
-              </ListItem> */}
+              </ListItem> 
             </List>
-            <Title>Notifications</Title>
+            <Title>Notifications</Title> */}
             {/* <List>
               <ListItem>
                 <MailOutline className="icon" />

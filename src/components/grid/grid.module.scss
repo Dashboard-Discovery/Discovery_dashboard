@@ -11,16 +11,40 @@
 .form_wrapper {    
     padding: 20px;
 
-    & input , label {
-        color: #333;
+    & input {
+        color: #333 !important;
     }
 
     & label {
+        color: #333;
         font-weight: bold;
     }
 
 }
+.resources {
 
-.resources th {
-    font-weight: bold;    
+    & th {
+        font-weight: bold;  
+        min-width: 100px;
+        line-height: 15px;
+        background-color: #eee;  
+    }
+
+}
+
+.table_container {
+    border-radius: 0px !important;
+}
+
+.toolbar_buttons {
+    align-self: center;
+    right: 10px;
+    position: absolute;
+    .add_entry {
+        background: #fff;
+
+        &:focus ,&:hover  {
+            background-color: #fff !important;
+        }
+    }
 }
