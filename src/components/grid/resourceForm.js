@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from "react";
-import { saveResource, updateResource, getAllProjects} from '../Service/service';
+import React, { useState, useEffect } from "react";
+import { saveResource, updateResource, getAllProjects } from '../Service/service';
 
 import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
@@ -15,33 +15,34 @@ import styles from './grid.module.scss';
 
 const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
 
-  const [empNo, setEmpNo] = useState();
-  const [projectName, setProjectName] = useState();
-  const [empName, setEmpName] = useState();
-  const [role, setRole] = useState();
-  const [experience, setExperience] = useState();
-  const [skillSet, setSkillset] = useState();
-  const [billability, setBillability] = useState();
+  const [empNo, setEmpNo] = useState(0);
+  const [projectName, setProjectName] = useState('');
+  const [empName, setEmpName] = useState('');
+  const [role, setRole] = useState('');
+  const [experience, setExperience] = useState(0);
+  const [skillSet, setSkillset] = useState('');
+  const [billability, setBillability] = useState('');
   const [billingStartDate, setBillingStartDate] = useState();
   const [billingEndDate, setBillingEndDate] = useState();
-  const [funnel, setFunnel] = useState();
-  const [WON, setWON] = useState();
-  const [telLocation, setTelLocation] = useState();
-  const [email, setEmail] = useState();
-  const [mobile, setMobile] = useState();
-  const [competency, setCompetency] = useState();
-  const [source, setSource] = useState();
-  const [grade, setGrade] = useState();
-  const [active, setActive] = useState();  
-  const [projectList,setProjectList]=useState([])
+  const [funnel, setFunnel] = useState(0);
+  const [WON, setWON] = useState(0);
+  const [telLocation, setTelLocation] = useState('');
+  const [email, setEmail] = useState('');
+  const [mobile, setMobile] = useState(0);
+  const [competency, setCompetency] = useState('');
+  const [source, setSource] = useState('');
+  const [grade, setGrade] = useState('');
+  const [active, setActive] = useState(true);
+  const [projectList, setProjectList] = useState([])
+  const billing = ['BILLABLE', 'NONBILLABLE'];
 
   const handleClose = () => {
     setOpen(false);
   }
 
   const handleSubmit = () => {
-    
-     const data = {
+
+    const data = {
       "empNo": empNo,
       "projectName": projectName,
       "empName": empName,
@@ -49,29 +50,59 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
       "experience": experience,
       "skillSet": skillSet,
       "billability": billability,
-      "email": email
+      "billingStartDate": new Date(billingStartDate),
+      "billingEndDate": new Date(billingEndDate),
+      "funnel": funnel,
+      "won": WON,
+      "telLocation": telLocation,
+      "email": email,
+      "mobile": mobile,
+      "competency": competency,
+      "source": source,
+      "grade": grade
     };
-    
+
     if (!isUpdate) {
+      console.log(data, '====')
       const response = saveResource(data);
       if (response === '200' || 'OK') {
         setOpen(false);
       }
-    } else {
-      
-        const response = updateResource(data, formData?.id);
-        if (response === '200' || 'OK') {
-          setOpen(false);
-        }
-      
+    } else {      
+      const response = updateResource(data, formData?.id);
+      if (response === '200' || 'OK') {
+        setOpen(false);
+      }
+
     }
   }
 
-  useEffect(async()=>{
-    const responseProject= await getAllProjects();                                                                                                                                                                                  
+  useEffect(async () => {
+    const responseProject = await getAllProjects();
     setProjectList(responseProject);
-    console.log('project list is',projectList)                                                                                                                                                                        
-  },[])
+    console.log('project list is', projectList)
+  }, [])
+
+  useEffect(() => {
+    setProjectName(formData? formData?.projectName : '');
+    setEmpNo(formData? formData?.empNo : '');
+    setEmpName(formData? formData?.empName : "");
+    setRole(formData? formData?.role : ''); 
+    setExperience(formData? formData?.experience : ''); 
+    setSkillset(formData? formData?.skillSet : ''); 
+    setBillability(formData? formData?.billability : ''); 
+    setBillingStartDate(formData? formData?.billingStartDate : ''); 
+    setBillingEndDate(formData? formData?.billingEndDate : ''); 
+    setWON(formData? formData?.WON : ''); 
+    setFunnel(formData? formData?.setFunnel : ''); 
+    setTelLocation(formData? formData?.telLocation : ''); 
+    setEmail(formData? formData?.email : ''); 
+    setMobile(formData? formData?.mobile : ''); 
+    setCompetency(formData? formData?.competency : ''); 
+    setSource(formData? formData?.source : ''); 
+    setGrade(formData? formData?.grade : ''); 
+  }, [formData,open])
+
 
   return (
     <Dialog
@@ -84,13 +115,13 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
       <DialogContent>
         <div className={styles.form_wrapper}>
           <form>
-          <div className='Input'>             
-              <Select type="text" placeholder="Project" name="project" defaultValue={formData?.projectName}
+            <div className='Input'>
+              <select type="text" placeholder="Project" name="project" defaultValue={formData ? formData?.projectName : 'Select Project'}
                 onChange={(e) => setProjectName(e.target.value)} >
                 {projectList && (projectList.map((item) => {
-                  return <MenuItem key={item?.id} value={item.projectName} selected={formData?.projectName == item.projectName ? true : false}>{item.projectName}</MenuItem>
+                  return <option key={item?.id} value={item.projectName} selected={formData?.projectName == item.projectName ? true : false}>{item.projectName}</option>
                 }))}
-              </Select>
+              </select>
               <label htmlFor="project">Project</label>
             </div>
             <div className='Input'>
@@ -116,12 +147,16 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
             <div className='Input'>
               <input type="text" placeholder="Skill set" name="skillSet" defaultValue={formData?.skillSet}
                 onChange={(e) => setSkillset(e.target.value)} />
-              <label htmlFor=""></label>
+              <label htmlFor="skillSet">Skill Set</label>
             </div>
             <div className='Input'>
-              <input type="text" placeholder="Billability" name='billability' defaultValue={formData?.billability}
-                onChange={(e) => setBillability(e.target.value)} />
-              <label htmlFor=""></label>
+              <select type="text" placeholder="Billability" name="billability" defaultValue={formData ? formData?.billability : 'Select Project'}
+                  onChange={(e) => setBillability(e.target.value)} >
+                  {billing && (billing.map((item) => {
+                    return <option key={item} value={item} selected={formData?.billability == item ? true : false}>{item}</option>
+                  }))}
+                </select>  
+                <label htmlFor="billability">Billability</label>
             </div>
             <div className='Input'>
               <input type="date" placeholder="Billing start date" name="billingStartDate" defaultValue={formData?.billingStartDate}
@@ -135,8 +170,13 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
             </div>
             <div className='Input'>
               <input type="text" placeholder="WON" name="won" defaultValue={formData?.WON}
-                onChange={(e) => setProjectName(e.target.value)} />
+                onChange={(e) => setWON(e.target.value)} />
               <label htmlFor="won">WON</label>
+            </div>
+            <div className='Input'>
+              <input type="text" placeholder="Funnel" name="funnel" defaultValue={formData?.setFunnel}
+                onChange={(e) => setFunnel(e.target.value)} />
+              <label htmlFor="funnel">Funnel</label>
             </div>
             <div className='Input'>
               <input type="text" placeholder="TEL location" name="tellocation" defaultValue={formData?.telLocation}
@@ -146,7 +186,7 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
             <div className='Input'>
               <input type="email" placeholder="Email" name="email" defaultValue={formData?.email}
                 onChange={(e) => setEmail(e.target.value)} />
-              <label htmlFor="email">email</label>
+              <label htmlFor="email">Email</label>
             </div>
             <div className='Input'>
               <input type="text" placeholder="Mobile" name="mobile" defaultValue={formData?.mobile}
@@ -193,7 +233,7 @@ const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;
 
   return (
-    <DialogTitle classes='text-center' sx={{ m: 0, p: 2 }} {...other}>
+    <DialogTitle className='text-center' sx={{ m: 0, p: 2 }} {...other}>
       {children}
       {onClose ? (
         <IconButton
