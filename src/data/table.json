@@ -1,0 +1,18 @@
+[
+    {
+        "role": "delivery manager",
+        "roleId": "1234"
+    },
+    {
+        "role": "tpm",
+        "roleId": "2345"
+    },
+    {
+        "role": "sr. tech lead",
+        "roleId": "3456"
+    },
+    {
+        "role": "tech lead",
+        "roleId": "4567"
+    }
+]

@@ -46,6 +46,18 @@ import {
                 <div>Resource Details</div>
               </ListItem>
               </Link>
+              <Link to="/project" className="link">
+                <ListItem>
+                  <TrendingUp className="icon" />
+                  <div>project</div>
+                </ListItem>
+              </Link>
+              <Link to="/role" className="link">
+                <ListItem>
+                  <TrendingUp className="icon" />
+                  <div>role</div>
+                </ListItem>
+              </Link>
               {/* <Link to="/users" className="link">
                 <ListItem>
                   <Group className="icon" />
