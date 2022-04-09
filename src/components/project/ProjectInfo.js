@@ -234,6 +234,8 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
+import styles from '../grid/grid.module.scss';
+
 function App() {
   const [users, setUser] = useState([])
   const [projectName, setProjectName] = useState("");
@@ -349,16 +351,13 @@ function App() {
     {/* <DenseAppBar title={'Project'} style={{ width: '100%' }} /> */}
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar variant="dense" style={{ justifyContent: 'center' }}>
-          <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            {/* <MenuIcon /> */}
-          </IconButton>
+        <Toolbar variant="dense">
           <Typography variant="h6" color="inherit" component="div">
             Project
           </Typography>
-          <Stack direction="row" style={{ backgroundColor: '#1976d2', width: '70%', marginLeft: '40%', alignItems: 'right', justifyContent: 'center' }}>
-            <Button variant="outlined" style={{ color: '#1976d2', backgroundColor: 'white', display: 'flex' }} onClick={handleAddClick}>Add Entry <AddIcon /></Button>
-          </Stack>
+          <div className={styles.toolbar_buttons}>
+            <Button variant="outlined" className={styles.add_entry} onClick={handleAddClick}>Add Entry <AddIcon /></Button>
+          </div>
         </Toolbar>
       </AppBar>
     </Box>
