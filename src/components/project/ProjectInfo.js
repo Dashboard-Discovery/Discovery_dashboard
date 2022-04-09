@@ -224,12 +224,40 @@ import Pagination from '@mui/material/Pagination';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState, useEffect } from 'react';
 import EditForm from '../FormComponent/EditForm'
+import AddEditForm from '../grid/resourceForm';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import Stack from '@mui/material/Stack';
+import Select from '@mui/material/Select';
 function App() {
   const [users, setUser] = useState([])
   const [projectName, setProjectName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
-  const [userId, setUserId] = useState(null)
+  const [userId, setUserId] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState();
+  const [isUpdate, setIsUpdate] = useState(false);
+
+  const handleEditClick = (data) => {
+    setIsUpdate(true);
+    setSelected(data)
+    setOpen(true);
+  }
+
+  const handleAddClick = () => {
+    setIsUpdate(false);
+    setOpen(true);
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     getUsers();
@@ -289,29 +317,27 @@ function App() {
   //     })
   //   })
   // }
-  function selectUser(id)
-  {
-    let item=users[id-1];
-      setProjectName(item.projectName)
-        // setEmail(item.email)
-        // setMobile(item.mobile);
-        // setUserId(item.id)
+  function selectUser(id) {
+    let item = users[id - 1];
+    setProjectName(item.projectName)
+    // setEmail(item.email)
+    // setMobile(item.mobile);
+    // setUserId(item.id)
   }
-  function updateUser()
-  {
+  function updateUser() {
     const tokenNow = `Bearer ${getTokenNow()}`;
     console.log('token now is', tokenNow)
-    let item={projectName}
-    console.warn("item",item)
+    let item = { projectName }
+    console.warn("item", item)
 
     fetch(`http://10.75.80.111:8423/billing/v1/admin/project`, {
       method: 'PUT',
-      headers:{
-        'Accept':'application/json',
-        'Content-Type':'application/json',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
         'Authorization': tokenNow
       },
-      body:JSON.stringify(item)
+      body: JSON.stringify(item)
     }).then((result) => {
       result.json().then((resp) => {
         console.warn(resp)
@@ -320,7 +346,22 @@ function App() {
     })
   }
   return (<div style={{ width: '80%' }}>
-    <DenseAppBar title={'Project'} style={{ width: '100%' }} />
+    {/* <DenseAppBar title={'Project'} style={{ width: '100%' }} /> */}
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar variant="dense" style={{ justifyContent: 'center' }}>
+          <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+            {/* <MenuIcon /> */}
+          </IconButton>
+          <Typography variant="h6" color="inherit" component="div">
+            Project
+          </Typography>
+          <Stack direction="row" style={{ backgroundColor: '#1976d2', width: '70%', marginLeft: '40%', alignItems: 'right', justifyContent: 'center' }}>
+            <Button variant="outlined" style={{ color: '#1976d2', backgroundColor: 'white', display: 'flex' }} onClick={handleAddClick}>Add Entry <AddIcon /></Button>
+          </Stack>
+        </Toolbar>
+      </AppBar>
+    </Box>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: '100%' }} aria-label="simple table">
         <TableHead>
@@ -336,8 +377,8 @@ function App() {
                 <TableCell component="th" scope="row" style={{ paddingBottom: '1%' }}>
                   {item.projectName}
                 </TableCell>
-                {/* <TableCell align="right" style={{ paddingBottom: '1%' }}><EditIcon onClick={(e) => handleEditClick(item.id)} /></TableCell> */}
-                <td><button onClick={() => selectUser(item.id)}>Update</button></td>
+                <TableCell align="right" style={{ paddingBottom: '1%' }}><EditIcon onClick={(e) => handleAddClick(item.id)} /></TableCell>
+                {/* <td><button onClick={() => selectUser(item.id)}>Update</button></td> */}
               </TableRow>
             </>
           ))}
@@ -346,11 +387,11 @@ function App() {
     </TableContainer>
     <div>
       <input type="text" value={projectName} onChange={(e) => { setProjectName(e.target.value) }} /> <br /><br />
-      <button onClick={updateUser} >Update User</button>  
+      <button onClick={updateUser} >Update User</button>
       {/* <button type="button" onClick={saveData} >Save New User</button> */}
     </div>
+    <AddEditForm formData={(isUpdate && selected) ? selected : undefined} isUpdate={isUpdate} open={open} setOpen={setOpen} />
   </div>
-
   );
 }
 export default App;
