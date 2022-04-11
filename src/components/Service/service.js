@@ -112,22 +112,20 @@ export  const getAllProjects=async ()=>{
 
 }
 
-export const getAllResources = async () => {
+export const getAllResources = async (pageSize, pageNumber) => {
     const tokenNow = await `Bearer ${getTokenNow()}`;
-
-    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource`, {
+    const pageNo = pageNumber >= 0? '?pageNo='+pageNumber+'&pageSize=' +pageSize : ''
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource${pageNo}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': tokenNow
-        },
+        }
 
-    });
+    })
     const data = await response.json();
     return data;
-
-
 }
 
 export const saveResource = async (data) => {
