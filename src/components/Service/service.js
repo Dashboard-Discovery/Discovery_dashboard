@@ -97,10 +97,27 @@ export  const getAllProjects=async ()=>{
    });
    const data= await response.json();
    return  data;
-      
-      
-
 }
+
+export  const getAllCountries=async ()=>{
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+   console.log('token now is', tokenNow)
+
+   const response =await fetch("http://10.75.80.111:8423/billing/v1/admin/country", {
+       method: 'GET',
+       headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json',
+           'Authorization': tokenNow
+       },
+
+   });
+   const data= await response.json();
+   return  data;
+}
+
+
+
 
 export const getAllResources = async () => {
     const tokenNow = await `Bearer ${getTokenNow()}`;

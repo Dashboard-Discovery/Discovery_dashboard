@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { saveResource, updateResource, getAllProjects } from '../Service/service';
+import { saveResource, updateResource, getAllProjects, getAllCountries } from '../Service/service';
 import { getTokenNow } from '../../utils/useToken';
 import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
@@ -17,6 +17,7 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
 
   const [empNo, setEmpNo] = useState(0);
   const [projectName, setProjectName] = useState('');
+  const [countryName, setCountryName] = useState('');
   const [empName, setEmpName] = useState('');
   const [role, setRole] = useState('');
   const [experience, setExperience] = useState(0);
@@ -34,6 +35,7 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
   const [grade, setGrade] = useState('');
   const [active, setActive] = useState(true);
   const [projectList, setProjectList] = useState([])
+  const [countryList, setCountryList] = useState([])
   const [users, setUser] = useState([])
   const billing = ['BILLABLE', 'NONBILLABLE'];
   
@@ -46,65 +48,8 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
 
     const data = {
       "projectName": projectName,
+      "countryName": countryName
     };
-
-    function saveData() {
-      const tokenNow = `Bearer ${getTokenNow()}`;
-      console.log('token now is', tokenNow)
-      let data = { projectName }
-      // console.warn(data);
-      fetch("http://10.75.80.111:8423/billing/v1/admin/project", {
-        method: "POST",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': tokenNow
-        },
-        body: JSON.stringify(data)
-      }).then((resp) => {
-        // console.warn("resp",resp);;
-        resp.json().then((result) => {
-          console.warn("result", result)
-          getUsers()
-        })
-      })
-    }
-
-    function updateUser() {
-      const tokenNow = `Bearer ${getTokenNow()}`;
-      console.log('token now is', tokenNow)
-      let data = { projectName }
-      console.warn("item", data)
-  
-      fetch(`http://10.75.80.111:8423/billing/v1/admin/project`, {
-        method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': tokenNow
-        },
-        body: JSON.stringify(data)
-      }).then((result) => {
-        result.json().then((resp) => {
-          console.warn(resp)
-          getUsers()
-        })
-      })
-    }
-
-    if (!isUpdate) {
-      console.log(data, '====')
-      const response = saveData(data);
-      if (response === '200' || 'OK') {
-        setOpen(false);
-      }
-    } else {      
-      const response = updateUser(data, formData?.id);
-      if (response === '200' || 'OK') {
-        setOpen(false);
-      }
-
-    }
   }
 
   useEffect(() => {
@@ -128,14 +73,40 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
     })
   }
 
+  function saveData() {
+    const tokenNow = `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+    let data = { projectName }
+    fetch("http://10.75.80.111:8423/billing/v1/admin/project", {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': tokenNow
+      },
+      body: JSON.stringify(data)
+    }).then((resp) => {
+      resp.json().then((result) => {
+        console.warn("result", result)
+      })
+    })
+  }
+
   useEffect(async () => {
     const responseProject = await getAllProjects();
     setProjectList(responseProject);
     console.log('project list is', projectList)
   }, [])
+
+  useEffect(async () => {
+    const responseCountry = await getAllCountries();
+    setCountryList(responseCountry);
+    console.log('project list is', projectList)
+  }, [])
   
   useEffect(() => {
     setProjectName(formData? formData?.projectName : '');
+    setCountryName(formData? formData?.countryName : '');
   }, [formData,open])
   
 
@@ -160,6 +131,15 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
               </select>
               <label htmlFor="project">Project</label>
             </div>
+            <div className='Input'>
+              <select type="text" placeholder="country" name="country" defaultValue={formData ? formData?.countryName : 'Select Country'}
+                onChange={(e) => setCountryName(e.target.value)} >
+                {countryList && (countryList.map((item) => {
+                  return <option key={item?.id} value={item.countryName} selected={formData?.countryName == item.countryName ? true : false}>{item.countryName}</option>
+                }))}
+              </select>
+              <label htmlFor="country">Country</label>
+            </div>
           </form> 
           : 
           <form>
@@ -169,28 +149,23 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
               </input>
               <label htmlFor="project">Project</label>
             </div>
+            <div className='Input'>
+              <select type="text" placeholder="country" name="country" defaultValue={formData ? formData?.countryName : 'Select Country'}
+                onChange={(e) => setCountryName(e.target.value)} >
+                {countryList && (countryList.map((item) => {
+                  return <option key={item?.id} value={item.countryName} selected={formData?.countryName == item.countryName ? true : false}>{item.countryName}</option>
+                }))}
+              </select>
+              <label htmlFor="country">Location</label>
+            </div>
           </form>
           }
           
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        {/* <Button onClick={saveData}>Save</Button> */}
-        {/* <Button onClick={updateUser} >Update User</Button> */}
-        <Button onClick={handleSubmit}>Submit</Button>
-        {/* <button onClick={saveData} >Save New User</button>
-        {/* {isUpdate ? 
-          <>
-            <Button onClick={handleSubmit} >Submit</Button>
-            <Button onClick={handleClose}>Cancel</Button>
-          </>
-          : 
-          <>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSubmit}>Submit</Button>
-          </>
-        } */}
+        <Button onClick={saveData}>save</Button>
+        <Button onClick={handleClose}>cancel</Button>
       </DialogActions>
     </Dialog>)
 

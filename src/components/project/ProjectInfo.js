@@ -238,6 +238,7 @@ import styles from '../grid/grid.module.scss';
 
 function App() {
   const [users, setUser] = useState([])
+  const [country, setCountry] = useState([])
   const [projectName, setProjectName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
@@ -282,10 +283,32 @@ function App() {
     })
   }
 
+
+  useEffect(() => {
+    getCountry();
+  }, [])
+  function getCountry() {
+    const tokenNow = `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+
+    fetch("http://10.75.80.111:8423/billing/v1/admin/country", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': tokenNow
+      },
+    }).then((result) => {
+      result.json().then((resp) => {
+        setCountry(resp)
+      })
+    })
+  }
+
   function saveData() {
     const tokenNow = `Bearer ${getTokenNow()}`;
     console.log('token now is', tokenNow)
-    let data = { projectName }
+    let item = { projectName }
     fetch("http://10.75.80.111:8423/billing/v1/admin/project", {
       method: "POST",
       headers: {
@@ -293,7 +316,7 @@ function App() {
         'Content-Type': 'application/json',
         'Authorization': tokenNow
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(item)
     }).then((resp) => {
       resp.json().then((result) => {
         console.warn("result", result)
@@ -302,22 +325,9 @@ function App() {
     })
   }
 
-  // function deleteUser(id) {
-  //   fetch(`http://localhost:4000/todo/${id}`, {
-  //     method: 'DELETE'
-  //   }).then((result) => {
-  //     result.json().then((resp) => {
-  //       console.warn(resp)
-  //       getUsers()
-  //     })
-  //   })
-  // }
   function selectUser(id) {
     let item = users[id - 1];
     setProjectName(item.projectName)
-    // setEmail(item.email)
-    // setMobile(item.mobile);
-    // setUserId(item.id)
   }
   function updateUser() {
     const tokenNow = `Bearer ${getTokenNow()}`;
@@ -359,8 +369,8 @@ function App() {
         <TableHead>
           <TableRow>
             <TableCell>Project Name</TableCell>
-            <TableCell align="center">Location</TableCell>
-            <TableCell align="right">Action</TableCell>
+            <TableCell>Location</TableCell>
+            <TableCell align="center">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -370,7 +380,12 @@ function App() {
                 <TableCell component="th" scope="row" style={{ paddingBottom: '1%' }}>
                   {item.projectName}
                 </TableCell>
-                <TableCell align="right" style={{ paddingBottom: '1%' }}><EditIcon onClick={(e) => handleEditClick(item.id)} /></TableCell>
+                {country.map((item, i) => (
+                  <>
+                    {item.countryName}
+                  </>
+                ))}
+                <TableCell align="center" style={{ paddingBottom: '1%' }}><EditIcon onClick={(e) => handleEditClick(item.id)} /></TableCell>
                 {/* <td><button onClick={() => selectUser(item.id)}>Update</button></td> */}
               </TableRow>
             </>
@@ -381,7 +396,7 @@ function App() {
     <div>
       <input type="text" value={projectName} onChange={(e) => { setProjectName(e.target.value) }} /> <br /><br />
       <button onClick={updateUser} >Update User</button>
-      {/* <button type="button" onClick={saveData} >Save New User</button> */}
+      <button type="button" onClick={saveData} >Save New User</button>
     </div>
     <AddEditForm formData={(isUpdate && selected) ? selected : undefined} isUpdate={isUpdate} open={open} setOpen={setOpen} />
   </div>
