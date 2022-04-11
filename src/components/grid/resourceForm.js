@@ -73,8 +73,8 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
     function updateUser() {
       const tokenNow = `Bearer ${getTokenNow()}`;
       console.log('token now is', tokenNow)
-      let item = { projectName }
-      console.warn("item", item)
+      let data = { projectName }
+      console.warn("item", data)
   
       fetch(`http://10.75.80.111:8423/billing/v1/admin/project`, {
         method: 'PUT',
@@ -83,7 +83,7 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
           'Content-Type': 'application/json',
           'Authorization': tokenNow
         },
-        body: JSON.stringify(item)
+        body: JSON.stringify(data)
       }).then((result) => {
         result.json().then((resp) => {
           console.warn(resp)
@@ -128,6 +128,12 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
     })
   }
 
+  useEffect(async () => {
+    const responseProject = await getAllProjects();
+    setProjectList(responseProject);
+    console.log('project list is', projectList)
+  }, [])
+  
   useEffect(() => {
     setProjectName(formData? formData?.projectName : '');
   }, [formData,open])
@@ -169,12 +175,12 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
         </div>
       </DialogContent>
       <DialogActions>
-        {/* <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={saveData}>Save</Button>
-        <Button onClick={updateUser} >Update User</Button>
-        <Button onClick={handleSubmit}>Submit</Button> */}
-        {/* <button onClick={saveData} >Save New User</button> */}
-        {isUpdate ? 
+        <Button onClick={handleClose}>Cancel</Button>
+        {/* <Button onClick={saveData}>Save</Button> */}
+        {/* <Button onClick={updateUser} >Update User</Button> */}
+        <Button onClick={handleSubmit}>Submit</Button>
+        {/* <button onClick={saveData} >Save New User</button>
+        {/* {isUpdate ? 
           <>
             <Button onClick={handleSubmit} >Submit</Button>
             <Button onClick={handleClose}>Cancel</Button>
@@ -184,7 +190,7 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
             <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={handleSubmit}>Submit</Button>
           </>
-        }
+        } */}
       </DialogActions>
     </Dialog>)
 

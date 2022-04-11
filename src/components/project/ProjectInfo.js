@@ -277,12 +277,7 @@ function App() {
       },
     }).then((result) => {
       result.json().then((resp) => {
-        // console.warn(resp)
         setUser(resp)
-        // setprojectName(resp.projectName)
-        // setMobile(resp[0].mobile)
-        // setEmail(resp[0].email)
-        // setUserId(resp[0].id)
       })
     })
   }
@@ -291,7 +286,6 @@ function App() {
     const tokenNow = `Bearer ${getTokenNow()}`;
     console.log('token now is', tokenNow)
     let data = { projectName }
-    // console.warn(data);
     fetch("http://10.75.80.111:8423/billing/v1/admin/project", {
       method: "POST",
       headers: {
@@ -301,7 +295,6 @@ function App() {
       },
       body: JSON.stringify(data)
     }).then((resp) => {
-      // console.warn("resp",resp);;
       resp.json().then((result) => {
         console.warn("result", result)
         getUsers()
@@ -366,6 +359,7 @@ function App() {
         <TableHead>
           <TableRow>
             <TableCell>Project Name</TableCell>
+            <TableCell align="center">Location</TableCell>
             <TableCell align="right">Action</TableCell>
           </TableRow>
         </TableHead>
