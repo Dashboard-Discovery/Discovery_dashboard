@@ -376,7 +376,7 @@ function App() {
                 <TableCell component="th" scope="row" style={{ paddingBottom: '1%' }}>
                   {item.projectName}
                 </TableCell>
-                <TableCell align="right" style={{ paddingBottom: '1%' }}><EditIcon onClick={(e) => handleAddClick(item.id)} /></TableCell>
+                <TableCell align="right" style={{ paddingBottom: '1%' }}><EditIcon onClick={(e) => handleEditClick(item.id)} /></TableCell>
                 {/* <td><button onClick={() => selectUser(item.id)}>Update</button></td> */}
               </TableRow>
             </>

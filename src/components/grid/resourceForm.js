@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { saveResource, updateResource, getAllProjects } from '../Service/service';
-
+import { getTokenNow } from '../../utils/useToken';
 import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -34,7 +34,9 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
   const [grade, setGrade] = useState('');
   const [active, setActive] = useState(true);
   const [projectList, setProjectList] = useState([])
+  const [users, setUser] = useState([])
   const billing = ['BILLABLE', 'NONBILLABLE'];
+  
 
   const handleClose = () => {
     setOpen(false);
@@ -43,33 +45,61 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
   const handleSubmit = () => {
 
     const data = {
-      "empNo": empNo,
       "projectName": projectName,
-      "empName": empName,
-      "role": role,
-      "experience": experience,
-      "skillSet": skillSet,
-      "billability": billability,
-      "billingStartDate": new Date(billingStartDate),
-      "billingEndDate": new Date(billingEndDate),
-      "funnel": funnel,
-      "won": WON,
-      "telLocation": telLocation,
-      "email": email,
-      "mobile": mobile,
-      "competency": competency,
-      "source": source,
-      "grade": grade
     };
+
+    function saveData() {
+      const tokenNow = `Bearer ${getTokenNow()}`;
+      console.log('token now is', tokenNow)
+      let data = { projectName }
+      // console.warn(data);
+      fetch("http://10.75.80.111:8423/billing/v1/admin/project", {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
+      }).then((resp) => {
+        // console.warn("resp",resp);;
+        resp.json().then((result) => {
+          console.warn("result", result)
+          getUsers()
+        })
+      })
+    }
+
+    function updateUser() {
+      const tokenNow = `Bearer ${getTokenNow()}`;
+      console.log('token now is', tokenNow)
+      let item = { projectName }
+      console.warn("item", item)
+  
+      fetch(`http://10.75.80.111:8423/billing/v1/admin/project`, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': tokenNow
+        },
+        body: JSON.stringify(item)
+      }).then((result) => {
+        result.json().then((resp) => {
+          console.warn(resp)
+          getUsers()
+        })
+      })
+    }
 
     if (!isUpdate) {
       console.log(data, '====')
-      const response = saveResource(data);
+      const response = saveData(data);
       if (response === '200' || 'OK') {
         setOpen(false);
       }
     } else {      
-      const response = updateResource(data, formData?.id);
+      const response = updateUser(data, formData?.id);
       if (response === '200' || 'OK') {
         setOpen(false);
       }
@@ -77,32 +107,31 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
     }
   }
 
-  useEffect(async () => {
-    const responseProject = await getAllProjects();
-    setProjectList(responseProject);
-    console.log('project list is', projectList)
+  useEffect(() => {
+    getUsers();
   }, [])
+  function getUsers() {
+    const tokenNow = `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+
+    fetch("http://10.75.80.111:8423/billing/v1/admin/project?projectName=Discovery", {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': tokenNow
+      },
+    }).then((result) => {
+      result.json().then((resp) => {
+        setUser(resp)
+      })
+    })
+  }
 
   useEffect(() => {
     setProjectName(formData? formData?.projectName : '');
-    setEmpNo(formData? formData?.empNo : '');
-    setEmpName(formData? formData?.empName : "");
-    setRole(formData? formData?.role : ''); 
-    setExperience(formData? formData?.experience : ''); 
-    setSkillset(formData? formData?.skillSet : ''); 
-    setBillability(formData? formData?.billability : ''); 
-    setBillingStartDate(formData? formData?.billingStartDate : ''); 
-    setBillingEndDate(formData? formData?.billingEndDate : ''); 
-    setWON(formData? formData?.WON : ''); 
-    setFunnel(formData? formData?.setFunnel : ''); 
-    setTelLocation(formData? formData?.telLocation : ''); 
-    setEmail(formData? formData?.email : ''); 
-    setMobile(formData? formData?.mobile : ''); 
-    setCompetency(formData? formData?.competency : ''); 
-    setSource(formData? formData?.source : ''); 
-    setGrade(formData? formData?.grade : ''); 
   }, [formData,open])
-
+  
 
   return (
     <Dialog
@@ -114,6 +143,7 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
       </BootstrapDialogTitle>
       <DialogContent>
         <div className={styles.form_wrapper}>
+        {isUpdate ? 
           <form>
             <div className='Input'>
               <select type="text" placeholder="Project" name="project" defaultValue={formData ? formData?.projectName : 'Select Project'}
@@ -124,96 +154,37 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
               </select>
               <label htmlFor="project">Project</label>
             </div>
+          </form> 
+          : 
+          <form>
             <div className='Input'>
-              <input type="text" placeholder="Emp Number" name="empNo" defaultValue={formData?.empNo}
-                onChange={(e) => setEmpNo(e.target.value)} />
-              <label htmlFor="empNo">Employee Num</label>
-            </div>
-            <div className='Input'>
-              <input type="text" placeholder="Emp Name" name="empName" defaultValue={formData?.empName}
-                onChange={(e) => setEmpName(e.target.value)} />
-              <label htmlFor="empName">Emp Name</label>
-            </div>
-            <div className='Input'>
-              <input type="text" placeholder="Role" name="role" defaultValue={formData?.role}
-                onChange={(e) => setRole(e.target.value)} />
-              <label htmlFor="role">Role</label>
-            </div>
-            <div className='Input'>
-              <input type="text" placeholder="Experience" name="experience" defaultValue={formData?.experience}
-                onChange={(e) => setExperience(e.target.value)} />
-              <label htmlFor="Experience">Experience</label>
-            </div>
-            <div className='Input'>
-              <input type="text" placeholder="Skill set" name="skillSet" defaultValue={formData?.skillSet}
-                onChange={(e) => setSkillset(e.target.value)} />
-              <label htmlFor="skillSet">Skill Set</label>
-            </div>
-            <div className='Input'>
-              <select type="text" placeholder="Billability" name="billability" defaultValue={formData ? formData?.billability : 'Select Project'}
-                  onChange={(e) => setBillability(e.target.value)} >
-                  {billing && (billing.map((item) => {
-                    return <option key={item} value={item} selected={formData?.billability == item ? true : false}>{item}</option>
-                  }))}
-                </select>  
-                <label htmlFor="billability">Billability</label>
-            </div>
-            <div className='Input'>
-              <input type="date" placeholder="Billing start date" name="billingStartDate" defaultValue={formData?.billingStartDate}
-                onChange={(e) => setBillingStartDate(e.target.value)} />
-              <label htmlFor="billingStartDate">Billing start date</label>
-            </div>
-            <div className='Input'>
-              <input type="date" placeholder="Billing end date" name="billingEndDate" defaultValue={formData?.billingEndDate}
-                onChange={(e) => setBillingEndDate(e.target.value)} />
-              <label htmlFor="billingEndDate">Billing end date</label>
-            </div>
-            <div className='Input'>
-              <input type="text" placeholder="WON" name="won" defaultValue={formData?.WON}
-                onChange={(e) => setWON(e.target.value)} />
-              <label htmlFor="won">WON</label>
-            </div>
-            <div className='Input'>
-              <input type="text" placeholder="Funnel" name="funnel" defaultValue={formData?.setFunnel}
-                onChange={(e) => setFunnel(e.target.value)} />
-              <label htmlFor="funnel">Funnel</label>
-            </div>
-            <div className='Input'>
-              <input type="text" placeholder="TEL location" name="tellocation" defaultValue={formData?.telLocation}
-                onChange={(e) => setTelLocation(e.target.value)} />
-              <label htmlFor="tellocation">TEL location</label>
-            </div>
-            <div className='Input'>
-              <input type="email" placeholder="Email" name="email" defaultValue={formData?.email}
-                onChange={(e) => setEmail(e.target.value)} />
-              <label htmlFor="email">Email</label>
-            </div>
-            <div className='Input'>
-              <input type="text" placeholder="Mobile" name="mobile" defaultValue={formData?.mobile}
-                onChange={(e) => setMobile(e.target.value)} />
-              <label htmlFor="mobile">Mobile</label>
-            </div>
-            <div className='Input'>
-              <input type="text" placeholder="Competency" name="competency" defaultValue={formData?.competency}
-                onChange={(e) => setCompetency(e.target.value)} />
-              <label htmlFor="competency">Competency</label>
-            </div>
-            <div className='Input'>
-              <input type="text" placeholder="Source" name="source" defaultValue={formData?.source}
-                onChange={(e) => setSource(e.target.value)} />
-              <label htmlFor="source">Source</label>
-            </div>
-            <div className='Input'>
-              <input type="text" placeholder="Grade" name="grade" defaultValue={formData?.grade}
-                onChange={(e) => setGrade(e.target.value)} />
-              <label htmlFor="grade">Grade</label>
+              <input type="text" placeholder="Project" name="project" value={projectName} 
+                onChange={(e) => setProjectName(e.target.value)} >
+              </input>
+              <label htmlFor="project">Project</label>
             </div>
           </form>
+          }
+          
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Submit</Button>
+        {/* <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={saveData}>Save</Button>
+        <Button onClick={updateUser} >Update User</Button>
+        <Button onClick={handleSubmit}>Submit</Button> */}
+        {/* <button onClick={saveData} >Save New User</button> */}
+        {isUpdate ? 
+          <>
+            <Button onClick={handleSubmit} >Submit</Button>
+            <Button onClick={handleClose}>Cancel</Button>
+          </>
+          : 
+          <>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleSubmit}>Submit</Button>
+          </>
+        }
       </DialogActions>
     </Dialog>)
 
