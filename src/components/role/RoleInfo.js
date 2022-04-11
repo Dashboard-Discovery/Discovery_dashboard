@@ -101,11 +101,13 @@ export default function ResourceGrid() {
               <TableCell>
                 {row.role}
               </TableCell>
+              <TableCell>
               {countries && countries.map((row) => (
                 <>
                   {row.countryName}
                 </>
               ))}
+              </TableCell>
               <TableCell align="center" style={{ paddingBottom: '1%' }}><EditIcon onClick={(e) => handleEditClick(row.id)} /></TableCell>
               {/* <td><button onClick={() => selectUser(item.id)}>Update</button></td> */}
               </TableRow>

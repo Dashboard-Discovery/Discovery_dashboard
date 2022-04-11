@@ -233,7 +233,7 @@ import { excelIcon } from '../icons';
 import styles from './grid.module.scss';
 import { StyledEngineProvider } from '@mui/styled-engine-sc';
 
-export default function ResourceGrid() {
+export default function ResourceGrid({formData}) {
   const [projects, setProjects] = useState([]);
   const [countries, setCountries] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -242,6 +242,9 @@ export default function ResourceGrid() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState();
   const [isUpdate, setIsUpdate] = useState(false);
+  const [projectName, setProjectName] = useState('');
+  const [countryName, setCountryName] = useState('');
+  const [countryList, setCountryList] = useState([])
 
   const rowsPerPage = 10;
   useEffect(async () => {
@@ -270,6 +273,16 @@ export default function ResourceGrid() {
     setIsUpdate(false);
     setOpen(true);
   }
+
+  useEffect(async () => {
+    const responseCountry = await getAllCountries();
+    setCountryList(responseCountry);
+  }, [])
+
+  useEffect(() => {
+    setProjectName(formData? formData?.projectName : '');
+    setCountryName(formData? formData?.countryName : '');
+  }, [formData,open])
 
   return (
     <div className={`col-10 ${styles.resources}`}>
@@ -302,11 +315,17 @@ export default function ResourceGrid() {
               <TableCell>
                 {row.projectName}
               </TableCell>
-              {countries && countries.map((row) => (
-                <>
-                  {row.countryName}
-                </>
-              ))}
+              <TableCell>
+                {/* {countries && (countries.map((item) => {
+                    return <option key={item?.id} value={item.countryName} selected={formData?.countryName == item.countryName ? true : false}>{item.countryName}</option>
+                }))} */}
+                <select type="text" placeholder="country" name="country" defaultValue={formData ? formData?.countryName : 'Select Country'}
+                onChange={(e) => setCountryName(e.target.value)} >
+                {countryList && (countryList.map((item) => {
+                  return <option key={item?.id} value={item.countryName} selected={formData?.countryName == item.countryName ? true : false}>{item.countryName}</option>
+                }))}
+              </select>
+              </TableCell>
               <TableCell align="center" style={{ paddingBottom: '1%' }}><EditIcon onClick={(e) => handleEditClick(row.id)} /></TableCell>
               {/* <td><button onClick={() => selectUser(item.id)}>Update</button></td> */}
               </TableRow>
