@@ -133,8 +133,6 @@ export const getAllResources = async () => {
     });
     const data = await response.json();
     return data;
-
-
 }
 
 export const saveResource = async (data) => {
@@ -236,6 +234,109 @@ export  const getAllRoles=async ()=>{
    });
    const data= await response.json();
    return  data;
-      
-
 }
+
+
+export const getAllProjectMaster = async () => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/project?projectName=Discovery`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+
+    });
+    const data = await response.json();
+    return data;
+}
+
+
+export const updateProjectMaster = async (data, id) => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/project/Discovery/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
+
+    });
+    return response.status;
+}
+
+export const saveProjectMaster = async (data) => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/project`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
+
+    });
+    return response.status;
+}
+
+export const getAllRoleMaster = async () => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/role`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+
+    });
+    const data = await response.json();
+    return data;
+}
+
+export const updateRoleMaster = async (data, id) => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/role/Senior Consultant/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
+
+    });
+    return response.status;
+}
+
+
+export const saveRoleMaster = async (data) => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/role`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
+
+    });
+    return response.status;
+}
+
+

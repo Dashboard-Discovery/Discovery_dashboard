@@ -1,210 +1,6 @@
-// import * as React from 'react';
-// import Table from '@mui/material/Table';
-// import TableBody from '@mui/material/TableBody';
-// import TableCell from '@mui/material/TableCell';
-// import TableContainer from '@mui/material/TableContainer';
-// import TableHead from '@mui/material/TableHead';
-// import TableRow from '@mui/material/TableRow';
-// import Paper from '@mui/material/Paper';
-// import DenseAppBar from '../headerComponent/DenseAppBar'
-// import Pagination from '@mui/material/Pagination';
-// import { useEffect, useState } from 'react';
-// import EditIcon from '@mui/icons-material/Edit';
-// import Dialog from '@mui/material/Dialog';
-// import DialogActions from '@mui/material/DialogActions';
-// import DialogContent from '@mui/material/DialogContent';
-// import DialogTitle from '@mui/material/DialogTitle';
-// import AddEditForm from '../addEditForm/AddEditForm';
-// import Button from '@mui/material/Button';
-// import FormControl from '@mui/material/FormControl';
-
-// const RoleInfo = () => {
-//   const roleData = require('../../data/role.json');
-//   const [open, setOpen] = useState(false);
-//   const [currentRow, setCurrentRow] = useState({});
-  
-//   const handleEditClick = (data) => {
-//     console.log('data on edit click ', data)
-//     setOpen(true);
-//   }
-
-//   const handleClose = () => {
-//     setOpen(false);
-//   }
-//   return (<>
-//     <DenseAppBar title={'Role Details'} />
-//     <TableContainer component={Paper}>
-//       <Table sx={{ minWidth: 650 }} aria-label="simple table">
-//         <TableHead>
-//           <TableRow>
-//             <TableCell>Role Name</TableCell>
-//             <TableCell align="right">Role Id</TableCell>
-//             <TableCell align="right">Action</TableCell>
-//           </TableRow>
-//         </TableHead>
-//         <TableBody>
-//           {roleData.map((row) => (
-//             <>
-//               <TableRow>
-//                 <TableCell component="th" scope="row" style={{ paddingBottom: '1%' }}>
-//                   {row.role}
-//                 </TableCell>
-//                 <TableCell align="right" style={{ paddingBottom: '1%' }}>{row.roleId}</TableCell>
-//                 <TableCell align="right" style={{ paddingBottom: '1%' }}><EditIcon onClick={(e) => handleEditClick(row)} /></TableCell>
-//               </TableRow>
-//             </>
-//           ))}
-//         </TableBody>
-//       </Table>
-//     </TableContainer>
-//     <Dialog open={open} onClose={handleClose}>
-//       <DialogContent>
-//         <FormControl >
-//           {/* <AddEditForm formData={currentRow} /> */}
-//         </FormControl>
-//       </DialogContent>
-//       <DialogActions>
-//         <Button onClick={handleClose}>Cancel</Button>
-//         <Button onClick={handleClose}>Update</Button>
-//       </DialogActions>
-//     </Dialog>
-
-//   </>)
-// }
-
-// export default RoleInfo;
-
-
-// import "antd/dist/antd.css";
-// // import "./App.css";
-// import { Button, Table, Modal, Input } from "antd";
-// import { useState } from "react";
-// import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-
-// function App() {
-//     const roleData = require('../../data/role.json');
-//     const [isEditing, setIsEditing] = useState(false);
-//     const [editingStudent, setEditingStudent] = useState(null);
-//     const [dataSource, setDataSource] = useState(roleData);
-//     const columns = [
-//         {
-//             key: "1",
-//             title: "Role",
-//             dataIndex: "role",
-//         },
-//         {
-//             key: "2",
-//             title: "Role Id",
-//             dataIndex: "roleId",
-//         },
-//         {
-//             key: "3",
-//             title: "Actions",
-//             render: (record) => {
-//                 return (
-//                     <>
-//                         <EditOutlined
-//                             onClick={() => {
-//                                 onEditStudent(record);
-//                             }}
-//                         />
-//                         <DeleteOutlined
-//                             onClick={() => {
-//                                 onDeleteStudent(record);
-//                             }}
-//                             style={{ color: "red", marginLeft: 12 }}
-//                         />
-//                     </>
-//                 );
-//             },
-//         },
-//     ];
-
-//     const onAddStudent = () => {
-//         const randomNumber = parseInt(Math.random() * 1000);
-//         const newStudent = {
-//             role : "Name " + randomNumber,
-//             roleId: randomNumber,
-//         };
-//         setDataSource((pre) => {
-//             return [...pre, newStudent];
-//         });
-//     };
-//     const onDeleteStudent = (record) => {
-//         Modal.confirm({
-//             title: "Are you sure, you want to delete this student record?",
-//             okText: "Yes",
-//             okType: "danger",
-//             onOk: () => {
-//                 setDataSource((pre) => {
-//                     return pre.filter((student) => student.id !== record.id);
-//                 });
-//             },
-//         });
-//     };
-//     const onEditStudent = (record) => {
-//         setIsEditing(true);
-//         setEditingStudent({ ...record });
-//     };
-//     const resetEditing = () => {
-//         setIsEditing(false);
-//         setEditingStudent(null);
-//     };
-//     return (
-//       <div className="App">
-//         <header className="App-header">
-//           <Button onClick={onAddStudent}>Add a new Student</Button>
-//           <Table columns={columns} dataSource={dataSource}></Table>
-//           <Modal
-//             title="Edit Student"
-//             visible={isEditing}
-//             okText="Save"
-//             onCancel={() => {
-//                 resetEditing();
-//             }}
-//             onOk={() => {
-//               setDataSource((pre) => {
-//                   return pre.map((student) => {
-//                       if (student.id === editingStudent.id) {
-//                           return editingStudent;
-//                       } else {
-//                           return student;
-//                       }
-//                   });
-//               });
-//               resetEditing();
-//           }}
-//         >
-//           <Input
-//               value={editingStudent?.role}
-//               onChange={(e) => {
-//                   setEditingStudent((pre) => {
-//                       return { ...pre, role : e.target.value };
-//                   });
-//               }}
-//             />
-//             <Input
-//                 value={editingStudent?.roleId}
-//                 onChange={(e) => {
-//                     setEditingStudent((pre) => {
-//                         return { ...pre, roleId: e.target.value };
-//                     });
-//                 }}
-//             />
-//           </Modal>
-//         </header>
-//       </div>
-//   );
-// }
-
-// export default App;
-
-
-
-// import './App.css';
-import { getTokenNow } from '../../utils/useToken';
-// import React, { useEffect, useState } from 'react';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
+import * as XLSX from 'xlsx';
+import jsPDF from "jspdf";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -214,105 +10,115 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DenseAppBar from '../headerComponent/DenseAppBar'
 import Pagination from '@mui/material/Pagination';
+
 import EditIcon from '@mui/icons-material/Edit';
-import { useState,useEffect } from 'react';
-import EditForm from '../FormComponent/EditForm'
-function App() {
-  const [users, setUser] = useState([])
-  const [role, setRole] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [userId,setUserId]=useState(null)
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import PropTypes from 'prop-types';
+// import AddEditForm from '../grid/resourceForm';
+import AddEditForm from './EditForm';
+import * as FileSaver from 'file-saver';
+import "jspdf-autotable";
+import { getAllProjectMaster, getAllCountries, getAllRoleMaster } from '../Service/service';
+import { excelIcon } from '../icons';
+//import DataTable from 'react-data-table-component';
 
-  useEffect(() => {
-    getUsers();
-  }, [])
-  function getUsers() {
-    const tokenNow = `Bearer ${getTokenNow()}`;
-    console.log('token now is', tokenNow)
+// import styles from '../grid/grid.module.scss';
+import styles from './grid.module.scss';
+import { StyledEngineProvider } from '@mui/styled-engine-sc';
 
-    fetch("http://10.75.80.111:8423/billing/v1/admin/role",{
-      method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': tokenNow
-        },
-    }).then((result) => {
-      result.json().then((resp) => {
-        // console.warn(resp)
-        setUser(resp)
-        setRole(resp[0].role)
-        // setMobile(resp[0].mobile)
-        // setEmail(resp[0].email)
-        // setUserId(resp[0].id)
-      })
-    })
+export default function ResourceGrid() {
+  const [roles, setRoles] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentpage, setCurrentPage] = useState(1);
+  const [currentData, setCurrentData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState();
+  const [isUpdate, setIsUpdate] = useState(false);
+
+  const rowsPerPage = 10;
+  useEffect(async () => {
+    const roleDetails = await getAllRoleMaster();
+    setRoles(roleDetails);
+    setTotalPages(Math.ceil(roles.length / rowsPerPage));
+  }, []);
+
+  useEffect(async () => {
+    const countryDetails = await getAllCountries();
+    setCountries(countryDetails);
+    // setTotalPages(Math.ceil(projects.length / rowsPerPage));
+  }, []);
+
+  const handleEditClick = (data) => {
+    setIsUpdate(true);
+    setSelected(data)
+    setOpen(true);
   }
 
-  // function deleteUser(id) {
-  //   fetch(`http://localhost:4000/todo/${id}`, {
-  //     method: 'DELETE'
-  //   }).then((result) => {
-  //     result.json().then((resp) => {
-  //       console.warn(resp)
-  //       getUsers()
-  //     })
-  //   })
-  // }
-  // function selectUser(id)
-  // {
-  //   let item=users[id-1];
-  //   setName(item.name)
-  //       setEmail(item.email)
-  //       setMobile(item.mobile);
-  //       setUserId(item.id)
-  // }
-  // function updateUser()
-  // {
-  //   let item={projectName}
-  //   console.warn("item",item)
-  //   const tokenNow = await `Bearer ${getTokenNow()}`;
-  //   console.log('token now is', tokenNow)
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-  //   await fetch(`http://10.75.80.111:8423/billing/v1/admin/project`, {
-  //     method: 'PUT',
-  //     headers:{
-  //       'Accept':'application/json',
-  //       'Content-Type':'application/json'
-  //       'Authorization': tokenNow
-  //     },
-  //     body:JSON.stringify(item)
-  //   }).then((result) => {
-  //     result.json().then((resp) => {
-  //       console.warn(resp)
-  //       getUsers()
-  //     })
-  //   })
-  // }
-  return ( <div style={{width:'80%'}}>
-    <DenseAppBar title={'Role'} style={{width:'100%'}}/>
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: '100%' }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Role Name</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {users.map((item, i) => (
-            <>
-              <TableRow>
-                <TableCell component="th" scope="row" style={{ paddingBottom: '1%' }}>
-                  {item.role}
-                </TableCell>
+  const handleAddClick = () => {
+    setIsUpdate(false);
+    setOpen(true);
+  }
+
+  return (
+    <div className={`col-10 ${styles.resources}`}>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar variant="dense">
+            <Typography variant="h6" color="inherit" component="div">
+              Role
+            </Typography>
+            <div className={styles.toolbar_buttons}>
+              <Button variant="outlined" className={styles.add_entry} onClick={handleAddClick}>Add Entry <AddIcon /></Button>
+            </div>
+          </Toolbar>
+
+        </AppBar>
+      </Box>
+
+      <TableContainer component={Paper} className={styles.table_container}>
+        <Table sx={{ minWidth: 650 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Role Name</TableCell>
+              <TableCell>Location</TableCell>
+              <TableCell align="center">Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {roles && roles.map((row) => (
+              <TableRow >
+              <TableCell>
+                {row.role}
+              </TableCell>
+              {countries && countries.map((row) => (
+                <>
+                  {row.countryName}
+                </>
+              ))}
+              <TableCell align="center" style={{ paddingBottom: '1%' }}><EditIcon onClick={(e) => handleEditClick(row.id)} /></TableCell>
+              {/* <td><button onClick={() => selectUser(item.id)}>Update</button></td> */}
               </TableRow>
-            </>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  </div>
+            ))}
+          </TableBody>
+        </Table>
+        <Pagination count={totalPages}
+          page={currentpage}
+          onChange={(e) => { setCurrentPage(e.target.value) }} />
+      </TableContainer>
+
+      <AddEditForm formData={(isUpdate && selected) ? selected : undefined} isUpdate={isUpdate} open={open} setOpen={setOpen} />
+
+    </div>
   );
 }
-export default App;
