@@ -8,7 +8,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { getAllProjects, saveTimeSheetEntry, updateTimeSheetEntry } from '../Service/service';
+import { getAllProjects, getPlannedWorkingDays, saveTimeSheetEntry, updateTimeSheetEntry } from '../Service/service';
 
 
 
@@ -51,6 +51,11 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload,
 
 
   },[currentRow,open])
+  useEffect(async()=>{
+    const plannedDaysFromApi=await getPlannedWorkingDays(currentMonth,currentYear,empNo);
+    setPlannedWrkDys(plannedDaysFromApi);
+
+  },[currentMonth,currentYear,empNo])
   useEffect(async()=>{
     const responseProject= await getAllProjects();                                                                                                                                                                                  
     setProjectList(responseProject);
@@ -166,7 +171,6 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload,
       id="outlined-name"
       label="Planned Working Days"
       value={plannedWrkDys}
-      onChange={(e)=>handlePlannedDays(e)}
       style={{marginBottom:'10%'}}
 
     />

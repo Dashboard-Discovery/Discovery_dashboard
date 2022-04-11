@@ -36,7 +36,7 @@ import {
                 <div>Resource Details</div>
               </ListItem>
               </Link>
-              <Link to="/billing" className="link">
+              <Link to="/billing">
                 <ListItem>
                   <AttachMoney className="icon" />
                   <div>Billing</div>

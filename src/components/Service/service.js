@@ -26,14 +26,24 @@ export const getResourceByEmployeeNumber = (employeeNumber) => {
 }
 
 
-export  const getAllTimesheet=async (filter)=>{
-    let url='http://10.75.80.111:8423/billing/v1/admin/timesheet'
+export  const getAllTimesheet=async (filter,page,pageSize)=>{
+    let url='http://10.75.80.111:8423/billing/v1/admin/timesheet';
+    if(page){
+        url+=`?pageNo=${page}`
+    }
+    if(pageSize){
+        url+=`&&pageSize=${pageSize}`
+    }
     if(filter){
-        if(filter!=='ALL PROJECTS'){
+        if(page && filter !='ALL PROJECTS'){
+            url+=`&&projectname=${filter}`
+        }
+        if(!page && filter!=='ALL PROJECTS'){
             url +=`?projectname=${filter}`
         }
         
     }
+
      const tokenNow = await `Bearer ${getTokenNow()}`;
     console.log('token now is', tokenNow)
     const response =await fetch(url, {
@@ -154,8 +164,14 @@ export const updateResource = async (data, id) => {
     return response.status;
 }
 
-export const getBilling=async()=>{
-    let url='http://10.75.80.111:8423/billing/v1/admin/billing'
+export const getBilling=async(page,pageSize)=>{
+    let url='http://10.75.80.111:8423/billing/v1/admin/billing';
+    if(page){
+        url+=`?pageNo=${page-1}`;
+    }
+    if(pageSize){
+        url+=`&&pageSize=${pageSize}`;
+    }
      const tokenNow = await `Bearer ${getTokenNow()}`;
     console.log('token now is', tokenNow)
     const response =await fetch(url, {
@@ -173,7 +189,7 @@ export const getBilling=async()=>{
 }
 export  const updateBilling=async (data,id)=>{
     const tokenNow = await `Bearer ${getTokenNow()}`;
-    let url=`http://10.75.80.111:8423/billing/v1/admin/billing/12${id}`;
+    let url=`http://10.75.80.111:8423/billing/v1/admin/billing/${id}`;
     console.log('url getting here is',url);
    console.log('token now is', tokenNow)
    const response =await fetch(url, {
@@ -209,6 +225,25 @@ export  const getAllRoles=async ()=>{
    console.log('token now is', tokenNow)
 
    const response =await fetch("http://10.75.80.111:8423/billing/v1/admin/role", {
+       method: 'GET',
+       headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json',
+           'Authorization': tokenNow
+       },
+
+   });
+   const data= await response.json();
+   return  data;
+      
+
+}
+
+export  const getPlannedWorkingDays=async (month,year,empNo)=>{
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+   console.log('token now is', tokenNow)
+
+   const response =await fetch(`http://localhost:8423/billing/v1/admin/actualWorkDays?year=${year}&month=${month}&empno=${empNo}`, {
        method: 'GET',
        headers: {
            'Accept': 'application/json',

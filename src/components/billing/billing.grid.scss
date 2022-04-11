@@ -1,0 +1,57 @@
+.primaryBtn {
+    background-color: #16a0b6 !important;
+    border-color: #16a0b6 !important;
+    color: #fff !important;
+
+    &:hover , &:focus{
+        box-shadow: none !important;
+    }
+}
+
+.form_wrapper {    
+    padding: 20px;
+
+    & input, & select {
+        color: #333 !important;
+    }
+
+    & select {
+        padding: 2px 10px;
+        margin: 8px 4px 0 10px;
+        font-family: "Noto Sans", sans-serif;
+        font-size: 14px;
+        width: 190px;
+    }
+
+    & label {
+        color: #333;
+        font-weight: bold;
+    }
+}
+
+.table-head-billing {
+
+    font-weight: bold;  
+    min-width: 100px;
+    line-height: 15px;
+    background-color: #a3eaf5; 
+    padding: 8px; 
+
+}
+
+.table_container {
+    border-radius: 0px !important;
+}
+
+.toolbar_buttons {
+    align-self: center;
+    right: 10px;
+    position: absolute;
+    .add_entry {
+        background: #fff;
+
+        &:focus ,&:hover  {
+            background-color: #fff !important;
+        }
+    }
+}
