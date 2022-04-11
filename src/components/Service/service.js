@@ -82,6 +82,7 @@ export  const updateTimeSheetEntry=async (data,id)=>{
    console.log('update statussssssssssssssssssssssssssssssssssssssssssssssss',response);
    return  response.status;
 }
+
 export  const getAllProjects=async ()=>{
     const tokenNow = await `Bearer ${getTokenNow()}`;
    console.log('token now is', tokenNow)
@@ -119,18 +120,18 @@ export  const getAllCountries=async ()=>{
 
 
 
-export const getAllResources = async () => {
+export const getAllResources = async (pageSize, pageNumber) => {
     const tokenNow = await `Bearer ${getTokenNow()}`;
-
-    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource`, {
+    const pageNo = pageNumber >= 0? '?pageNo='+pageNumber+'&pageSize=' +pageSize : ''
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource${pageNo}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': tokenNow
-        },
+        }
 
-    });
+    })
     const data = await response.json();
     return data;
 }
