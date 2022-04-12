@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { saveResource, updateResource, getAllProjects } from '../Service/service';
+import { saveResource, updateResource, getAllProjects, getAllRoles} from '../Service/service';
 
 import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
@@ -9,8 +9,7 @@ import Button from '@mui/material/Button';
 import DialogContent from '@mui/material/DialogContent';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
-import Select from '@mui/material/Select';
-import MenuItem from "@mui/material/MenuItem";
+import {ConvertDate} from '../../utils/Common';
 import styles from './grid.module.scss';
 
 const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
@@ -33,7 +32,8 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
   const [source, setSource] = useState('');
   const [grade, setGrade] = useState('');
   const [active, setActive] = useState(true);
-  const [projectList, setProjectList] = useState([])
+  const [projectList, setProjectList] = useState([]);
+  const [roleList, setRoleList]=useState([])
   const billing = ['BILLABLE', 'NONBILLABLE'];
 
   const handleClose = () => {
@@ -80,7 +80,8 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
   useEffect(async () => {
     const responseProject = await getAllProjects();
     setProjectList(responseProject);
-    console.log('project list is', projectList)
+    const responseRole = await getAllRoles();
+    setRoleList(responseRole);
   }, [])
 
   useEffect(() => {
@@ -135,9 +136,13 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
               <label htmlFor="empName">Emp Name</label>
             </div>
             <div className='Input'>
-              <input type="text" placeholder="Role" name="role" defaultValue={formData?.role}
-                onChange={(e) => setRole(e.target.value)} />
-              <label htmlFor="role">Role</label>
+            <select type="text" placeholder="Role" name="role" defaultValue={formData?.role}
+                onChange={(e) => setRole(e.target.value)} >
+                {roleList && (roleList.map((item) => {
+                  return <option key={item?.id} value={item.role} selected={formData?.role == item.role ? true : false}>{item.role}</option>
+                }))}
+              </select>
+              <label htmlFor="project">Role</label>
             </div>
             <div className='Input'>
               <input type="text" placeholder="Experience" name="experience" defaultValue={formData?.experience}
@@ -159,12 +164,12 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
                 <label htmlFor="billability">Billability</label>
             </div>
             <div className='Input'>
-              <input type="date" placeholder="Billing start date" name="billingStartDate" defaultValue={formData?.billingStartDate}
+              <input type="date" placeholder="Billing start date" name="billingStartDate" defaultValue={ConvertDate(formData?.billingStartDate)}
                 onChange={(e) => setBillingStartDate(e.target.value)} />
               <label htmlFor="billingStartDate">Billing start date</label>
             </div>
             <div className='Input'>
-              <input type="date" placeholder="Billing end date" name="billingEndDate" defaultValue={formData?.billingEndDate}
+              <input type="date" placeholder="Billing end date" name="billingEndDate" defaultValue={ConvertDate(formData?.billingEndDate)}
                 onChange={(e) => setBillingEndDate(e.target.value)} />
               <label htmlFor="billingEndDate">Billing end date</label>
             </div>
@@ -218,16 +223,6 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
     </Dialog>)
 
 }
-
-class Input extends React.Component {
-  render() {
-    return <div className='Input'>
-      <input type={this.props.type} name={this.props.name} defaultValue={this.props.value} placeholder={this.props.placeholder} />
-      <label htmlFor={this.props.name}>{this.props.placeholder}</label>
-    </div>
-  }
-}
-
 
 const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as XLSX from 'xlsx';
-import jsPDF from "jspdf";
+//import jsPDF from "jspdf";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,19 +8,16 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import DenseAppBar from '../headerComponent/DenseAppBar'
 import Pagination from '@mui/material/Pagination';
-
+import {ConvertDate} from '../../utils/Common';
 import EditIcon from '@mui/icons-material/Edit';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import MenuItem from '@mui/material/MenuItem';
-import PropTypes from 'prop-types';
 import AddEditForm from './resourceForm';
 import * as FileSaver from 'file-saver';
 import "jspdf-autotable";
@@ -28,9 +25,7 @@ import { getAllResources } from '../Service/service';
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 //import DataTable from 'react-data-table-component';
-
 import styles from './grid.module.scss';
-import { StyledEngineProvider } from '@mui/styled-engine-sc';
 
 export default function ResourceGrid() {
     const [resources, setResources] = useState([]);
@@ -54,8 +49,9 @@ export default function ResourceGrid() {
         setPageNumber(value);
     };
     const handlePageSize = (e) => {
-        if(totalRecords > e.target.value)
+        if(totalRecords > e.target.value){
             setPageSize(e.target.value);
+        }            
     }
 
     // const dataStringLines = resources;
@@ -166,16 +162,16 @@ export default function ResourceGrid() {
                                 <TableCell align="right">{row.experience}</TableCell>
                                 <TableCell>{row.skillSet}</TableCell>
                                 <TableCell>{row.billability}</TableCell>
-                                <TableCell align="right">{row.billingStartDate}</TableCell>
-                                <TableCell align="right">{row.billingEndDate}</TableCell>
+                                <TableCell>{ConvertDate(row.billingStartDate)}</TableCell>
+                                <TableCell>{ConvertDate(row.billingEndDate)}</TableCell>
                                 <TableCell>{row.WON}</TableCell>
-                                <TableCell>{row.tellocation}</TableCell>
+                                <TableCell>{row.telLocation}</TableCell>
                                 <TableCell>{row.email}</TableCell>
                                 <TableCell align="right">{row.mobile}</TableCell>
                                 <TableCell>{row.competency}</TableCell>
                                 <TableCell align="right">{row.source}</TableCell>
                                 <TableCell align="right">{row.grade}</TableCell>
-                                <TableCell><button><EditIcon onClick={(e) => handleEditClick(row)} /></button></TableCell>
+                                <TableCell><button className='btn'><EditIcon onClick={(e) => handleEditClick(row)} /></button></TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
