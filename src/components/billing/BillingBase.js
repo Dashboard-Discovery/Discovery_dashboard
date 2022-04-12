@@ -11,7 +11,7 @@ import Pagination from '@mui/material/Pagination';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState,useEffect } from 'react';
 import EditForm from '../FormComponent/EditForm'
-import { getAllTimesheet } from '../Service/service';
+import { getAllTimesheet,timeSheetDelete } from '../Service/service';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -28,6 +28,8 @@ import TextField from '@mui/material/TextField';
 import './BillingBase.css';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ConfirmDelete from '../ConfirmDelete/ConfirmDelete';
 
 
 
@@ -44,6 +46,8 @@ const BillingBase = () => {
   const [currentProject,setCurrentProject]=useState('ALL PROJECTS');
   const [page,setPage]=useState(1);
   const [pageSize,setPageSize]=useState(10)
+  const [openDelete,setOpenDelete]=useState(false);
+  const [deleteId,setDeleteId]=useState(-1);
   useEffect(async () => {
     console.log('getting here after selecting')
     setReload(false);
@@ -99,6 +103,11 @@ const handlePage = (event,value) => {
 const handlePageSize=(e)=>{
   setPageSize(e.target.value);
 
+}
+const handleDelete=(row)=>{
+console.log(row)
+setOpenDelete(true);
+setDeleteId(row?.id);
 }
   console.log('billing data line 79',billingData?.message)
 
@@ -163,7 +172,7 @@ const handlePageSize=(e)=>{
                 </TableCell>
                 <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.actualWrkDys}</TableCell>
                 <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.amount?row.amount:'N/A'}</TableCell>
-                <TableCell align="center" style={{ paddingBottom: '1%' }}><EditIcon onClick={(e) => handleEditClick(row)} /></TableCell>
+                <TableCell align="center" style={{ paddingBottom: '1%' }}><span><EditIcon onClick={(e) => handleEditClick(row)} /> <DeleteForeverIcon onClick={(e)=>handleDelete(row)}/></span></TableCell>
               </TableRow>
             </>
           ))}
@@ -199,7 +208,7 @@ const handlePageSize=(e)=>{
 
   
     <EditForm formType={formType} setFormType={setFormType} currentRow={currentRow} open={open} setOpen={setOpen} handleReload={handleReload}/>
-
+    {openDelete&&(<ConfirmDelete openDelete={openDelete} setOpenDelete={setOpenDelete} id={deleteId}/>)}
   </div>)
 }
 

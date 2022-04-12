@@ -84,15 +84,17 @@ export default function EditForm({currentRow,formType,open,setOpen,handleReload,
     setActualWrkDys(e.target.value);
   }
   const handleSaveOrUpdate=()=>{
-    console.log('saving data...........................')
+    console.log('saving data...........................',monthData.indexOf(currentMonth)+1)
     let data={
       "empNo":empNo,
       "projectName":project,
-      "month":`${currentMonth}-${currentYear}`,
+      "month":`${monthData.indexOf(currentMonth)+1}-${currentYear}`,
       "plannedWrkDys":plannedWrkDys,
-      "actualWrkDys":actualWrkDys,  
+      "actualWrkDys":actualWrkDys,
       }
+  
       if(formType =='edit'){
+        data={...data,'amount':currentRow?.amount};
         const response=updateTimeSheetEntry(data,currentRow?.id);
         if(response ==='200' || 'OK'){
           setOpen(false);

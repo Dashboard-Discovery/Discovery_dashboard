@@ -241,7 +241,7 @@ export  const getPlannedWorkingDays=async (month,year,empNo)=>{
     const tokenNow = await `Bearer ${getTokenNow()}`;
    console.log('token now is', tokenNow)
 
-   const response =await fetch(`http://localhost:8423/billing/v1/admin/actualWorkDays?year=${year}&month=${month}&empno=${empNo}`, {
+   const response =await fetch(`http://10.75.80.111:8423/billing/v1/admin/actualWorkDays?year=${year}&month=${month}&empno=${empNo}`, {
        method: 'GET',
        headers: {
            'Accept': 'application/json',
@@ -253,5 +253,39 @@ export  const getPlannedWorkingDays=async (month,year,empNo)=>{
    const data= await response.json();
    return  data;
       
+
+}
+export const timeSheetDelete=async(id)=>{
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+ 
+    const response =await fetch(`http://10.75.80.111:8423/billing/v1/admin/timesheet/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+ 
+    });
+    const data= await response.json();
+    return  data;
+}
+
+export const getResourceBetweenMonth=async({fromMonth,toMonth})=>{
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+ 
+    const response =await fetch(`http://10.75.80.111:8423/billing/v1/admin/timesheet/resource?fromMonth=${fromMonth}&toMonth=${toMonth}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+ 
+    });
+    const data= await response.json();
+    return  data;
 
 }

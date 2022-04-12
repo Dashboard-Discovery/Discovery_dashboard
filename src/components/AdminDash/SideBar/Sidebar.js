@@ -11,9 +11,10 @@ import {
     LineStyle,
     Timeline,
     TrendingUp,
-    AttachMoney
+    AttachMoney,
 
   } from "@material-ui/icons";
+  import SummarizeIcon from '@mui/icons-material/Summarize';
   import { Link } from "react-router-dom";
   
   function Sidebar() {
@@ -40,6 +41,12 @@ import {
                 <ListItem>
                   <AttachMoney className="icon" />
                   <div>Billing</div>
+                </ListItem>
+              </Link>
+              <Link to="/reports">
+                <ListItem>
+                  <SummarizeIcon className="icon" />
+                  <div>Reports</div>
                 </ListItem>
               </Link>
             </List>
