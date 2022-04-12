@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ResourceGrid from "../../grid";
 import BillingBase from "../../billing/BillingBase";
 import BaseBilling from "../../BaseBilling";
+import Reports from "../../Reports/Reports";
 
  const DashHome=()=> {
   return (
@@ -20,6 +21,7 @@ import BaseBilling from "../../BaseBilling";
              <BillingBase/>
            </Route>
            <Route path="/billing"><BaseBilling/></Route>
+           <Route path="/reports"><Reports/></Route>
           </Switch>
         </div>
     </Router>
