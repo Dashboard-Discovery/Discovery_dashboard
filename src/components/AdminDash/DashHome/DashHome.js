@@ -3,7 +3,7 @@ import Sidebar from "../../AdminDash/SideBar/Sidebar";
 import "./styles.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ResourceGrid from "../../grid";
-import BillingBase from "../../billing/BillingBase";
+import Timesheet from "../../TimeSheet/Timesheet";
 import BaseBilling from "../../BaseBilling";
 import Reports from "../../Reports/Reports";
 
@@ -18,7 +18,7 @@ import Reports from "../../Reports/Reports";
              <ResourceGrid/>
            </Route>
            <Route path="/timesheet">
-             <BillingBase/>
+             <Timesheet/>
            </Route>
            <Route path="/billing"><BaseBilling/></Route>
            <Route path="/reports"><Reports/></Route>
