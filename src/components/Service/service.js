@@ -272,11 +272,12 @@ export const timeSheetDelete=async(id)=>{
     return  data;
 }
 
-export const getResourceBetweenMonth=async({fromMonth,toMonth})=>{
+export const getResourceBetweenMonth=async(fromMonth,toMonth)=>{
     const tokenNow = await `Bearer ${getTokenNow()}`;
     console.log('token now is', tokenNow)
- 
-    const response =await fetch(`http://10.75.80.111:8423/billing/v1/admin/timesheet/resource?fromMonth=${fromMonth}&toMonth=${toMonth}`, {
+    let url=`http://10.75.80.111:8423/billing/v1/admin/timesheet/resource?fromMonth=${fromMonth}&toMonth=${toMonth}`
+   console.log('urllllllllllllllllllllllllll',url)
+    const response =await fetch(url, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -289,3 +290,24 @@ export const getResourceBetweenMonth=async({fromMonth,toMonth})=>{
     return  data;
 
 }
+
+
+export const validateEmployee=async(employeeNumber)=>{
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+    console.log('token now is', tokenNow)
+    let url=`http://10.75.80.111:8423/billing/v1/admin/timesheet/checkemployeexists?empno=${employeeNumber}`
+   console.log('urllllllllllllllllllllllllll',url)
+    const response =await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+ 
+    });
+    const data= await response.json();
+    return  data;
+
+}
+

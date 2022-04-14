@@ -53,10 +53,10 @@ const BillingBase = () => {
     setReload(false);
     const data= await getAllTimesheet(currentProject,page,pageSize);
     console.log('data billing is',data)
-    setBillingData(data);
+    setBillingData(data?.content);
     console.log('current billing data',billingData[0])
     setCurrentRow(billingData[0])
-    setTotalPages(Math.ceil(billingData.length / rowsPerPage));
+    setTotalPages(data?.totalPages);
   },[isReload,currentpage,currentProject,page,pageSize]);
   useEffect(() => { }, [])
   const onChangeHandler = ( 
@@ -127,6 +127,7 @@ setDeleteId(row?.id);
         value={currentProject}
         onChange={(e)=>{handleProject(e)}}
         className='project-select'
+        style={{paddingBottom:'0px'}}
       >
         <MenuItem value={'ALL PROJECTS'} style={{color:'#1976d2'}}>ALL PROJECTS</MenuItem>
         {projectList &&(projectList.map((item)=>{
@@ -158,7 +159,7 @@ setDeleteId(row?.id);
           </TableRow>
         </TableHead>
         <TableBody>
-          {billingData.map((row) => (
+          {billingData?.map((row) => (
             
             <>
               <TableRow key={row?.id}>
@@ -183,7 +184,7 @@ setDeleteId(row?.id);
         onChange={(e) => { setCurrentPage(e.target.value) }} /> */}
         <Stack direction='row' style={{marginTop: '2%',
     alignItems: 'center',paddingBottom:'2%',marginLeft:'1%'}}> 
-        <Pagination count={10} color="primary" page={page} onChange={handlePage} style={{marginLeft:'50%'}}/>
+        <Pagination count={totalPages} color="primary" page={page} onChange={handlePage} style={{marginLeft:'50%'}}/>
          <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"

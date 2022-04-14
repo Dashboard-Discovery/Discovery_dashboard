@@ -49,7 +49,8 @@
     position: absolute;
     .add_entry {
         background: #fff;
-
+        padding-top: 0%;
+        padding-bottom: 0%;
         &:focus ,&:hover  {
             background-color: #fff !important;
         }
