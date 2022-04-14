@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { saveResource, updateResource, getAllProjects, getAllRoles} from '../Service/service';
+import { saveResource, updateResource, getAllProjects, getAllRoles } from '../Service/service';
 
 import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
@@ -9,10 +9,10 @@ import Button from '@mui/material/Button';
 import DialogContent from '@mui/material/DialogContent';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
-import {ConvertDate} from '../../utils/Common';
+import { ConvertDate } from '../../utils/Common';
 import styles from './grid.module.scss';
 
-const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
+const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
 
   const [empNo, setEmpNo] = useState(0);
   const [projectName, setProjectName] = useState('');
@@ -31,10 +31,11 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
   const [competency, setCompetency] = useState('');
   const [source, setSource] = useState('');
   const [grade, setGrade] = useState('');
-  const [active, setActive] = useState(true);
+  const [status, setStatus] = useState('');
   const [projectList, setProjectList] = useState([]);
-  const [roleList, setRoleList]=useState([])
+  const [roleList, setRoleList] = useState([])
   const billing = ['BILLABLE', 'NONBILLABLE'];
+  const statusList = ['ACTIVE', 'INACTIVE'];
 
   const handleClose = () => {
     setOpen(false);
@@ -59,7 +60,8 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
       "mobile": mobile,
       "competency": competency,
       "source": source,
-      "grade": grade
+      "grade": grade,
+      "status": status
     };
 
     if (!isUpdate) {
@@ -67,11 +69,13 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
       const response = saveResource(data);
       if (response === '200' || 'OK') {
         setOpen(false);
+        handleReload()
       }
-    } else {      
+    } else {
       const response = updateResource(data, formData?.id);
       if (response === '200' || 'OK') {
         setOpen(false);
+        handleReload();
       }
 
     }
@@ -85,24 +89,25 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
   }, [])
 
   useEffect(() => {
-    setProjectName(formData? formData?.projectName : '');
-    setEmpNo(formData? formData?.empNo : '');
-    setEmpName(formData? formData?.empName : "");
-    setRole(formData? formData?.role : ''); 
-    setExperience(formData? formData?.experience : ''); 
-    setSkillset(formData? formData?.skillSet : ''); 
-    setBillability(formData? formData?.billability : ''); 
-    setBillingStartDate(formData? formData?.billingStartDate : ''); 
-    setBillingEndDate(formData? formData?.billingEndDate : ''); 
-    setWON(formData? formData?.WON : ''); 
-    setFunnel(formData? formData?.setFunnel : ''); 
-    setTelLocation(formData? formData?.telLocation : ''); 
-    setEmail(formData? formData?.email : ''); 
-    setMobile(formData? formData?.mobile : ''); 
-    setCompetency(formData? formData?.competency : ''); 
-    setSource(formData? formData?.source : ''); 
-    setGrade(formData? formData?.grade : ''); 
-  }, [formData,open])
+    setProjectName(formData ? formData?.projectName : '');
+    setEmpNo(formData ? formData?.empNo : '');
+    setEmpName(formData ? formData?.empName : "");
+    setRole(formData ? formData?.role : '');
+    setExperience(formData ? formData?.experience : '');
+    setSkillset(formData ? formData?.skillSet : '');
+    setBillability(formData ? formData?.billability : 'BILLABLE');
+    setBillingStartDate(formData ? formData?.billingStartDate : '');
+    setBillingEndDate(formData ? formData?.billingEndDate : '');
+    setWON(formData ? formData?.WON : '');
+    setFunnel(formData ? formData?.setFunnel : '');
+    setTelLocation(formData ? formData?.telLocation : '');
+    setEmail(formData ? formData?.email : '');
+    setMobile(formData ? formData?.mobile : '');
+    setCompetency(formData ? formData?.competency : '');
+    setSource(formData ? formData?.source : '');
+    setGrade(formData ? formData?.grade : '');
+    setStatus(formData ? formData?.status : 'ACTIVE');
+  }, [formData, open])
 
 
   return (
@@ -117,8 +122,9 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
         <div className={styles.form_wrapper}>
           <form>
             <div className='Input'>
-              <select type="text" placeholder="Project" name="project" defaultValue={formData ? formData?.projectName : 'Select Project'}
+              <select type="text" placeholder="Project" name="project" defaultValue={formData ? formData?.projectName : 'default'}
                 onChange={(e) => setProjectName(e.target.value)} >
+                  <option value={'default'} disabled>Choose an option</option>
                 {projectList && (projectList.map((item) => {
                   return <option key={item?.id} value={item.projectName} selected={formData?.projectName == item.projectName ? true : false}>{item.projectName}</option>
                 }))}
@@ -136,8 +142,9 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
               <label htmlFor="empName">Emp Name</label>
             </div>
             <div className='Input'>
-            <select type="text" placeholder="Role" name="role" defaultValue={formData?.role}
+              <select type="text" placeholder="Role" name="role" defaultValue={formData? formData.role: 'default'} 
                 onChange={(e) => setRole(e.target.value)} >
+                  <option value={'default'} disabled>Choose an option</option>
                 {roleList && (roleList.map((item) => {
                   return <option key={item?.id} value={item.role} selected={formData?.role == item.role ? true : false}>{item.role}</option>
                 }))}
@@ -155,13 +162,14 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
               <label htmlFor="skillSet">Skill Set</label>
             </div>
             <div className='Input'>
-              <select type="text" placeholder="Billability" name="billability" defaultValue={formData ? formData?.billability : 'Select Project'}
-                  onChange={(e) => setBillability(e.target.value)} >
-                  {billing && (billing.map((item) => {
-                    return <option key={item} value={item} selected={formData?.billability == item ? true : false}>{item}</option>
-                  }))}
-                </select>  
-                <label htmlFor="billability">Billability</label>
+              <select type="text" placeholder="Billability" name="billability" defaultValue={formData ? formData?.billability : 'default'}
+                onChange={(e) => setBillability(e.target.value)} >
+                  <option value={'default'} disabled>Choose an option</option>
+                {billing && (billing.map((item) => {
+                  return <option key={item} value={item} selected={formData?.billability == item ? true : false}>{item}</option>
+                }))}
+              </select>
+              <label htmlFor="billability">Billability</label>
             </div>
             <div className='Input'>
               <input type="date" placeholder="Billing start date" name="billingStartDate" defaultValue={ConvertDate(formData?.billingStartDate)}
@@ -212,6 +220,16 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen }) => {
               <input type="text" placeholder="Grade" name="grade" defaultValue={formData?.grade}
                 onChange={(e) => setGrade(e.target.value)} />
               <label htmlFor="grade">Grade</label>
+            </div>
+            <div className='Input'>
+              <select type="text" placeholder="Status" name="status" defaultValue={formData ? formData?.status : 'default'}
+                onChange={(e) => setStatus(e.target.value)} >
+                <option value={'default'} disabled>Choose an option</option>
+                {statusList && (statusList.map((item) => {
+                  return <option key={item} value={item} selected={formData?.status == item ? true : false}>{item}</option>
+                }))}
+              </select>
+              <label htmlFor="status">Status</label>
             </div>
           </form>
         </div>

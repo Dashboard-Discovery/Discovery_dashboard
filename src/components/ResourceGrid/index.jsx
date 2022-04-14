@@ -30,7 +30,7 @@ import styles from './grid.module.scss';
 export default function ResourceGrid() {
     const [resources, setResources] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
-    const [currentpage, setCurrentPage] = useState(1);
+    const [isReload, setReload] = useState(false);
     const [totalRecords, setTotalRecords] = useState();
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState();
@@ -43,7 +43,7 @@ export default function ResourceGrid() {
         setResources(result.content);
         setTotalPages(result.totalPages);
         setTotalRecords(result.totalElements);
-    }, [pageNumber,pageSize]);
+    }, [isReload, pageNumber,pageSize]);
 
     const handlePageNum = (event, value) => {
         setPageNumber(value);
@@ -90,9 +90,9 @@ export default function ResourceGrid() {
         setOpen(true);
     }
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const handleReload = () => {
+        setReload(true);
+    }
 
     const exportToCSV = () => {
         const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -195,7 +195,7 @@ export default function ResourceGrid() {
                     </Select>
                 </Stack>
             </TableContainer>
-            <AddEditForm formData={(isUpdate && selected) ? selected : undefined} isUpdate={isUpdate} open={open} setOpen={setOpen} />
+            <AddEditForm formData={(isUpdate && selected) ? selected : undefined} isUpdate={isUpdate} open={open} setOpen={setOpen} handleReload={handleReload} />
 
         </div>
     );
