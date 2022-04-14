@@ -29,14 +29,18 @@
     }
 }
 
-.table-head-billing {
+.resources {
+    & th {
+        font-weight: bold;  
+        min-width: 100px;
+        line-height: 15px;
+        background-color: #a3eaf5; 
+        padding: 8px; 
+    }
 
-    font-weight: bold;  
-    min-width: 100px;
-    line-height: 15px;
-    background-color: #a3eaf5; 
-    padding: 8px; 
-
+    & td {
+        padding: 8px;
+    }
 }
 
 .table_container {

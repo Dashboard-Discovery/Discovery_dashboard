@@ -31,11 +31,11 @@
 
 .table-head-billing {
 
-        font-weight: bold;  
-        min-width: 100px;
-        line-height: 15px;
-        background-color: #a3eaf5; 
-        padding: 8px; 
+    font-weight: bold;  
+    min-width: 100px;
+    line-height: 15px;
+    background-color: #a3eaf5; 
+    padding: 8px; 
 
 }
 
@@ -49,8 +49,8 @@
     position: absolute;
     .add_entry {
         background: #fff;
-        padding-top: 0%;
-        padding-bottom: 0%;
+        padding-top: 0px;
+
         &:focus ,&:hover  {
             background-color: #fff !important;
         }
