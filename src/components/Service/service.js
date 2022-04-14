@@ -130,7 +130,6 @@ export const getAllResources = async (pageSize, pageNumber) => {
 
 export const saveResource = async (data) => {
     const tokenNow = await `Bearer ${getTokenNow()}`;
-    console.log('token now is', tokenNow)
 
     const response = await fetch(`${SERVERURL}/billing/v1/admin/resource`, {
         method: 'POST',
@@ -140,14 +139,12 @@ export const saveResource = async (data) => {
             'Authorization': tokenNow
         },
         body: JSON.stringify(data)
-
     });
     return response.status;
 }
 
 export const updateResource = async (data, id) => {
     const tokenNow = await `Bearer ${getTokenNow()}`;
-    console.log('token now is', tokenNow)
 
     const response = await fetch(`${SERVERURL}/billing/v1/admin/resource/${id}`, {
         method: 'PUT',
@@ -288,4 +285,35 @@ export const getResourceBetweenMonth=async({fromMonth,toMonth})=>{
     const data= await response.json();
     return  data;
 
+}
+
+export const saveProjects = async (data) => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
+    });
+    return response.status;
+}
+
+export const updateProjects = async (data, id) => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
+
+    });
+    return response.status;
 }

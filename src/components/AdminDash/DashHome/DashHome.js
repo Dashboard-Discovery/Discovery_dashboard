@@ -2,10 +2,11 @@ import Appbar from "../AppBar/AppBar";
 import Sidebar from "../../AdminDash/SideBar/Sidebar";
 import "./styles.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import ResourceGrid from "../../grid";
+import ResourceGrid from "../../ResourceGrid";
 import BillingBase from "../../billing/BillingBase";
 import BaseBilling from "../../BaseBilling";
 import Reports from "../../Reports/Reports";
+import Projects from "../../Projects";
 
  const DashHome=()=> {
   return (
@@ -22,6 +23,7 @@ import Reports from "../../Reports/Reports";
            </Route>
            <Route path="/billing"><BaseBilling/></Route>
            <Route path="/reports"><Reports/></Route>
+           <Route path="/projects"><Projects/></Route>
           </Switch>
         </div>
     </Router>
