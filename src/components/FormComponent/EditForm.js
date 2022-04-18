@@ -9,6 +9,7 @@ import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import { getAllProjects, getPlannedWorkingDays, saveTimeSheetEntry, updateTimeSheetEntry, validateEmployee } from '../Service/service';
+import styles from './edit.module.scss'
 
 
 
@@ -39,7 +40,11 @@ export default function EditForm({ currentRow, formType, open, setOpen, handleRe
       setProject(currentRow?.projectName);
       setPlannedWrkDys(currentRow?.plannedWrkDys);
       setActualWrkDys(currentRow?.actualWrkDys);
-      setEmpNo(currentRow?.empNo)
+      setEmpNo(currentRow?.empNo);
+      setIsActualValid(true);
+      setIsPlannedWrkDys(true)
+      setEmployeeValid(true);
+      setIsEnableSave(true);
     } else if (formType === 'add') {
       setProject('');
       setPlannedWrkDys('');
@@ -47,8 +52,12 @@ export default function EditForm({ currentRow, formType, open, setOpen, handleRe
       setEmpNo('')
       setCurrentMonth('');
       setCurrentYear('');
+      setIsActualValid(false);
+      setIsPlannedWrkDys(false)
+      setEmployeeValid(false);
+      setIsEnableSave(false);
     }
-  }, [currentRow, open])
+  }, [currentRow, open]);
 
   useEffect(async () => {
     if (currentMonth && currentYear && employeeValid) {
@@ -61,6 +70,20 @@ export default function EditForm({ currentRow, formType, open, setOpen, handleRe
       }
     }
   }, [currentMonth, currentYear, empNo])
+  useEffect(() => {
+    if (parseInt(actualWrkDys) < 0) {
+      setIsActualValid(false);
+      setActualHelper('Should be positive');
+    } else if (parseInt(actualWrkDys) > parseInt(plannedWrkDys)) {
+      setIsActualValid(false);
+      setActualHelper('Should not greater than planned');
+    }
+    else {
+      setIsActualValid(true);
+      setActualHelper('');
+      setIsEnableSave(true);
+    }
+  }, [actualWrkDys])
 
   useEffect(async () => {
     const responseProject = await getAllProjects();
@@ -72,7 +95,7 @@ export default function EditForm({ currentRow, formType, open, setOpen, handleRe
     } else {
       setIsEnableSave(false);
     }
-  }, [isActualValid, isPlannedWrkDys, employeeValid])
+  }, [isActualValid, employeeValid])
 
   const handleChangeMonth = (e) => {
     setCurrentMonth(e.target.value)
@@ -93,12 +116,6 @@ export default function EditForm({ currentRow, formType, open, setOpen, handleRe
 
   const handleActualDays = (e) => {
     setActualWrkDys(e.target.value);
-    if (parseInt(actualWrkDys) > parseInt(plannedWrkDys) || parseInt(actualWrkDys) < 0 || !actualWrkDys || !plannedWrkDys) {
-      setIsActualValid(false);
-      setActualHelper('Actual days should be valid number less than planned');
-    } else {
-      setIsActualValid(true);
-    }
   }
 
   function converter(d) {
@@ -150,7 +167,7 @@ export default function EditForm({ currentRow, formType, open, setOpen, handleRe
 
     <Dialog open={open} onClose={handleClose} >
       <DialogContent>
-        <FormControl>
+        <FormControl className={styles.form_wrapper}>
           <TextField
             id="standard-basic"
             variant='outlined'
@@ -170,6 +187,7 @@ export default function EditForm({ currentRow, formType, open, setOpen, handleRe
             onChange={(e) => { handleProject(e) }}
             style={{ marginRight: '20%', width: '100%', color: 'black', marginBottom: '10%' }}
           >
+            <MenuItem value={project}>{project}</MenuItem>
             {projectList && (projectList.map((item) => {
               return <MenuItem key={item?.id} value={item.projectName}>{item.projectName}</MenuItem>
             }))}
@@ -211,6 +229,8 @@ export default function EditForm({ currentRow, formType, open, setOpen, handleRe
           <TextField
             id="outlined-name"
             label="Planned Working Days"
+            type="number"
+            disabled={true}
             error={!isPlannedWrkDys}
             helperText={isPlannedWrkDys ? '' : 'Unable to get planned days'}
             value={plannedWrkDys}
@@ -220,6 +240,8 @@ export default function EditForm({ currentRow, formType, open, setOpen, handleRe
           <TextField
             id="outlined-name"
             label="Actual Working Days"
+            type="number"
+            required
             error={!isActualValid}
             helperText={actualHelper}
             value={actualWrkDys}
@@ -231,7 +253,7 @@ export default function EditForm({ currentRow, formType, open, setOpen, handleRe
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSaveOrUpdate} disabled={employeeValid ? false : true}>{formType === 'edit' ? 'Update' : 'Save'}</Button>
+        <Button onClick={handleSaveOrUpdate} disabled={!isEnableSave ? true : false}>{formType === 'edit' ? 'Update' : 'Save'}</Button>
       </DialogActions>
     </Dialog>
 

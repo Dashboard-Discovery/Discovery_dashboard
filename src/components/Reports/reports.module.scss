@@ -3,15 +3,17 @@
     border-color: #16a0b6 !important;
     color: #fff !important;
 
-    &:hover , &:focus{
+    &:hover,
+    &:focus {
         box-shadow: none !important;
     }
 }
 
-.form_wrapper {    
+.form_wrapper {
     padding: 20px;
 
-    & input, & select {
+    & input,
+    & select {
         color: #333 !important;
     }
 
@@ -29,14 +31,18 @@
     }
 }
 
-.table-head-billing {
-
-        font-weight: bold;  
+.reports {
+    & th {
+        font-weight: bold;
         min-width: 100px;
         line-height: 15px;
-        background-color: #a3eaf5; 
-        padding: 8px; 
+        background-color: #a3eaf5;
+        padding: 8px;
+    }
 
+    & td {
+        padding: 8px;
+    }
 }
 
 .table_container {
@@ -44,14 +50,21 @@
 }
 
 .toolbar_buttons {
-    align-self: center;
+    width: 12%;
+    align-self: right;
     right: 10px;
     position: absolute;
-    .add_entry {
+
+    .select_drop {
         background: #fff;
-        padding-top: 0%;
-        padding-bottom: 0%;
-        &:focus ,&:hover  {
+        color: #1976d2;
+        padding-bottom: 9px;
+        padding-top: 7px;
+        border-radius: 4px;
+        margin-right: 10px;
+
+        &:focus,
+        &:hover {
             background-color: #fff !important;
         }
     }

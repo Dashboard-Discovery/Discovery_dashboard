@@ -3,15 +3,17 @@
     border-color: #16a0b6 !important;
     color: #fff !important;
 
-    &:hover , &:focus{
+    &:hover,
+    &:focus {
         box-shadow: none !important;
     }
 }
 
-.form_wrapper {    
+.form_wrapper {
     padding: 20px;
 
-    & input, & select {
+    & input,
+    & select {
         color: #333 !important;
     }
 
@@ -29,14 +31,18 @@
     }
 }
 
-.table-head-billing {
+.billing {
+    & th {
+        font-weight: bold;
+        min-width: 100px;
+        line-height: 15px;
+        background-color: #a3eaf5;
+        padding: 8px;
+    }
 
-    font-weight: bold;  
-    min-width: 100px;
-    line-height: 15px;
-    background-color: #a3eaf5; 
-    padding: 8px; 
-
+    & td {
+        padding: 8px;
+    }
 }
 
 .table_container {
@@ -47,11 +53,22 @@
     align-self: center;
     right: 10px;
     position: absolute;
+
     .add_entry {
         background: #fff;
-        padding-top: 0px;
 
-        &:focus ,&:hover  {
+        &:focus,
+        &:hover {
+            background-color: #fff !important;
+        }
+    }
+
+    .select_drop {
+        background: #fff;
+        color: #1976d2;
+
+        &:focus,
+        &:hover {
             background-color: #fff !important;
         }
     }
