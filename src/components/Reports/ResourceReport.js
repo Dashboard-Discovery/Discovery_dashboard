@@ -37,7 +37,7 @@ import styles from './reports.module.scss';
 
 
 
-const ResourceReport = ({ fromMonth, toMonth, toYear, fromYear, setFromMonth, setFromYear, setToMonth, setToYear, isReload, setIsReload, open, setOpen }) => {
+const ResourceReport = ({ fromMonth, toMonth, toYear, fromYear, setFromMonth, setFromYear, setToMonth, setToYear, isReload, setIsReload, open, setOpen, handleCsv, setHandleCsv }) => {
 
 
     const monthData = [{ '01': 'Jan' }, { '02': 'Feb' }, { '03': 'Mar' }, { '04': 'Apr' }, { '05': 'May' }, { '06': 'Jun' }, { '07': 'Jul' }, { '08': 'Aug' }, { '09': 'Sep' }, { '10': 'Oct' }, { '11': 'Nov' }, { '12': 'Dec' }];
@@ -59,7 +59,17 @@ const ResourceReport = ({ fromMonth, toMonth, toYear, fromYear, setFromMonth, se
     const handleChangeFromMonth = (e) => {
 
     }
-
+    const exportToCSV = () => {
+        console.log('test')
+        const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+        const fileExtension = '.xlsx';
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const resdata = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(resdata, 'billing_details' + fileExtension);
+        setHandleCsv(false);
+    }
 
     useEffect(async () => {
         console.log('from month async', fromMonth, fromYear, toMonth, toYear)
@@ -67,6 +77,13 @@ const ResourceReport = ({ fromMonth, toMonth, toYear, fromYear, setFromMonth, se
         setData(initData);
         setOpen(false)
     }, [isReload]);
+    useEffect(() => {
+        console.log('handle csv', handleCsv)
+        if (handleCsv) {
+            exportToCSV();
+
+        }
+    }, [handleCsv])
     return (
         <>
             {data && (
@@ -99,8 +116,8 @@ const ResourceReport = ({ fromMonth, toMonth, toYear, fromYear, setFromMonth, se
                         </TableBody>
                     </Table>
                     {/* <Pagination count={10}
-          page={currentpage}
-          onChange={(e) => { setCurrentPage(e.target.value) }} /> */}
+                        page={1}
+                        onChange={(e) => { setCurrentPage(e.target.value) }} /> */}
                     <Stack direction='row' style={{
                         marginTop: '2%',
                         alignItems: 'center', paddingBottom: '2%', marginLeft: '1%'
