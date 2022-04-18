@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import DenseAppBar from '../headerComponent/DenseAppBar'
 import Pagination from '@mui/material/Pagination';
 import EditIcon from '@mui/icons-material/Edit';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import EditForm from '../FormComponent/EditForm'
 import { getResourceBetweenMonth } from '../Service/service';
 import AppBar from '@mui/material/AppBar';
@@ -36,75 +36,73 @@ import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
 
 
-const ResourceReport=({fromMonth,toMonth,toYear,fromYear,setFromMonth,setFromYear,setToMonth,setToYear,isReload,setIsReload})=>{
+const ResourceReport = ({ fromMonth, toMonth, toYear, fromYear, setFromMonth, setFromYear, setToMonth, setToYear, isReload, setIsReload }) => {
 
 
- const monthData=[{'01':'Jan'},{'02':'Feb'},{'03':'Mar'},{'04':'Apr'},{'05':'May'},{'06':'Jun'},{'07':'Jul'},{'08':'Aug'},{'09':'Sep'},{'10':'Oct'},{'11':'Nov'},{'12':'Dec'}];
- const [openFilter,setOpenFilter]=useState(false);
- const [data,setData]=useState([]);
- const handleFilter=()=>{
-  setOpenFilter(true);
- }
- const handleClose=()=>{
-   setOpenFilter(false)
- }
- function converter(d) {
-  return (d < 10) ? '0' + d.toString() : d.toString();
-}
-function addMonths(date, months) {
-  date.setMonth(date.getMonth() + months);
-  return date;
-}
-const handleChangeFromMonth=(e)=>{
+    const monthData = [{ '01': 'Jan' }, { '02': 'Feb' }, { '03': 'Mar' }, { '04': 'Apr' }, { '05': 'May' }, { '06': 'Jun' }, { '07': 'Jul' }, { '08': 'Aug' }, { '09': 'Sep' }, { '10': 'Oct' }, { '11': 'Nov' }, { '12': 'Dec' }];
+    const [openFilter, setOpenFilter] = useState(false);
+    const [data, setData] = useState([]);
+    const handleFilter = () => {
+        setOpenFilter(true);
+    }
+    const handleClose = () => {
+        setOpenFilter(false)
+    }
+    function converter(d) {
+        return (d < 10) ? '0' + d.toString() : d.toString();
+    }
+    function addMonths(date, months) {
+        date.setMonth(date.getMonth() + months);
+        return date;
+    }
+    const handleChangeFromMonth = (e) => {
 
-}
+    }
 
 
- useEffect(async()=>{
-   console.log('from month async',fromMonth,fromYear,toMonth,toYear)
-   const initData=await getResourceBetweenMonth(`${fromMonth}-${fromYear}`,`${toMonth}-${toYear}`);
-   setData(initData);
- },[isReload]);
-    return(
+    useEffect(async () => {
+        console.log('from month async', fromMonth, fromYear, toMonth, toYear)
+        const initData = await getResourceBetweenMonth(`${fromMonth}-${fromYear}`, `${toMonth}-${toYear}`);
+        setData(initData);
+    }, [isReload]);
+    return (
         <>
-        {data&& (<TableContainer component={Paper}>
-            <Table sx={{ minWidth: '100%' }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Employee ID</TableCell>
-                  <TableCell>Project Name</TableCell>
-                  <TableCell align="center">Month & Year</TableCell>
-                  <TableCell align="center">Planned Working Days</TableCell>
-                  <TableCell align="center">Actual Working Days</TableCell>
-                  <TableCell align="center">Amount</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data?.map((row) => (
-                  
-                  <>
-                    <TableRow key={row?.id}>
-                      <TableCell component="th" scope="row" style={{ paddingBottom: '1%' }}>
-                        {row?.empNo}
-                      </TableCell>
-                      <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.projectName}</TableCell>
-                      <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.month}</TableCell>
-                      <TableCell align="center"  component="th" scope="row" style={{ paddingBottom: '1%' }}>
-                        {row.plannedWrkDys}
-                      </TableCell>
-                      <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.actualWrkDys}</TableCell>
-                      <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.amount?row.amount:'N/A'}</TableCell>
-                    </TableRow>
-                  </>
-                ))}
-              </TableBody>
-            </Table>
-            {/* <Pagination count={10}
+            {data && (<TableContainer component={Paper}>
+                <Table sx={{ minWidth: '100%' }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Employee ID</TableCell>
+                            <TableCell>Project Name</TableCell>
+                            <TableCell align="center">Month & Year</TableCell>
+                            <TableCell align="center">Actual Working Days</TableCell>
+                            <TableCell align="center">Amount</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {data?.map((row) => (
+
+                            <>
+                                <TableRow key={row?.id}>
+                                    <TableCell component="th" scope="row" style={{ paddingBottom: '1%' }}>
+                                        {row?.empNo}
+                                    </TableCell>
+                                    <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.projectName}</TableCell>
+                                    <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.month}</TableCell>
+                                    <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.actualWrkDys}</TableCell>
+                                    <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.amount ? row.amount : 'N/A'}</TableCell>
+                                </TableRow>
+                            </>
+                        ))}
+                    </TableBody>
+                </Table>
+                {/* <Pagination count={10}
               page={currentpage}
               onChange={(e) => { setCurrentPage(e.target.value) }} /> */}
-              <Stack direction='row' style={{marginTop: '2%',
-          alignItems: 'center',paddingBottom:'2%',marginLeft:'1%'}}> 
-              {/* <Pagination count={totalPages} color="primary" page={page} onChange={handlePage} style={{marginLeft:'50%'}}/>
+                <Stack direction='row' style={{
+                    marginTop: '2%',
+                    alignItems: 'center', paddingBottom: '2%', marginLeft: '1%'
+                }}>
+                    {/* <Pagination count={totalPages} color="primary" page={page} onChange={handlePage} style={{marginLeft:'50%'}}/>
                <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
@@ -117,10 +115,10 @@ const handleChangeFromMonth=(e)=>{
           <MenuItem value={25}>25</MenuItem>
           <MenuItem value={50}>50</MenuItem>
         </Select> */}
-        </Stack>
-      
-          </TableContainer>)}</>
-        
+                </Stack>
+
+            </TableContainer>)}</>
+
     )
 
 }
