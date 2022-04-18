@@ -35,9 +35,10 @@ export default function Projects() {
     const [isUpdate, setIsUpdate] = useState(false);
 
     useEffect(async () => {
+        setReload(false);
         const result = await getAllProjects(); 
         setProjects(result);
-    }, []);
+    }, [isReload]);
 
     const handleEditClick = (data) => {
         setIsUpdate(true);

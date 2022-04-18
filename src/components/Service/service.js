@@ -308,10 +308,10 @@ export const validateEmployee = async (employeeNumber) => {
 
 }
 
-export const saveProjects = async (data) => {
+export const saveProject = async (data) => {
     const tokenNow = await `Bearer ${getTokenNow()}`;
 
-    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource`, {
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/project`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -323,10 +323,10 @@ export const saveProjects = async (data) => {
     return response.status;
 }
 
-export const updateProjects = async (data, id) => {
+export const updateProject = async (data, id) => {
     const tokenNow = await `Bearer ${getTokenNow()}`;
 
-    const response = await fetch(`${SERVERURL}/billing/v1/admin/resource/${id}`, {
+    const response = await fetch(`${SERVERURL}/billing/v1/admin/project/${id}`, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',

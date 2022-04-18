@@ -39,11 +39,12 @@ export default function ResourceGrid() {
     const [pageSize, setPageSize] = useState(4)
 
     useEffect(async () => {
-        const result = await getAllResources(pageSize, pageNumber-1);        
+        console.log(isReload);
+        const result = await getAllResources(pageSize, pageNumber-1);              
         setResources(result.content);
         setTotalPages(result.totalPages);
         setTotalRecords(result.totalElements);
-    }, [isReload, pageNumber,pageSize]);
+    }, [isReload,pageNumber,pageSize]);
 
     const handlePageNum = (event, value) => {
         setPageNumber(value);
@@ -91,7 +92,7 @@ export default function ResourceGrid() {
     }
 
     const handleReload = () => {
-        setReload(true);
+        setReload(!isReload);
     }
 
     const exportToCSV = () => {
@@ -191,11 +192,10 @@ export default function ResourceGrid() {
                     >
                         <MenuItem value={4}>4</MenuItem>
                         <MenuItem value={8}>8</MenuItem>
-                        <MenuItem value={50}>50</MenuItem>
                     </Select>
                 </Stack>
             </TableContainer>
-            <AddEditForm formData={(isUpdate && selected) ? selected : undefined} isUpdate={isUpdate} open={open} setOpen={setOpen} handleReload={handleReload} />
+            <AddEditForm formData={(isUpdate && selected) ? selected : undefined} isUpdate={isUpdate} open={open} setOpen={setOpen} setReload={handleReload} />
 
         </div>
     );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { saveResource, updateResource, getAllProjects, getAllRoles } from '../Service/service';
+import { saveProject, updateProject } from '../Service/service';
 
 import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
@@ -9,7 +9,6 @@ import Button from '@mui/material/Button';
 import DialogContent from '@mui/material/DialogContent';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
-import { ConvertDate } from '../../utils/Common';
 import styles from '../ResourceGrid/grid.module.scss';
 
 const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
@@ -25,19 +24,19 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
       "projectName": projectName
     };
 
-    // if (!isUpdate) {
-    //   const response = saveResource(data);
-    //   if (response === '200' || 'OK') {
-    //     setOpen(false);
-    //     handleReload()
-    //   }
-    // } else {
-    //   const response = updateResource(data, formData?.id);
-    //   if (response === '200' || 'OK') {
-    //     setOpen(false);
-    //     handleReload();
-    //   }
-    // }
+    if (!isUpdate) {
+      const response = saveProject(data);
+      if (response === '200' || 'OK') {
+        setOpen(false);
+        handleReload()
+      }
+    } else {
+      const response = updateProject(data, formData?.id);
+      if (response === '200' || 'OK') {
+        setOpen(false);
+        handleReload();
+      }
+    }
   }
 
 
