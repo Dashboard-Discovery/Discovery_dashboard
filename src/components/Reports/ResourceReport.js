@@ -33,10 +33,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Popover from '@mui/material/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import styles from './reports.module.scss';
 
 
 
-const ResourceReport = ({ fromMonth, toMonth, toYear, fromYear, setFromMonth, setFromYear, setToMonth, setToYear, isReload, setIsReload }) => {
+const ResourceReport = ({ fromMonth, toMonth, toYear, fromYear, setFromMonth, setFromYear, setToMonth, setToYear, isReload, setIsReload, open, setOpen }) => {
 
 
     const monthData = [{ '01': 'Jan' }, { '02': 'Feb' }, { '03': 'Mar' }, { '04': 'Apr' }, { '05': 'May' }, { '06': 'Jun' }, { '07': 'Jul' }, { '08': 'Aug' }, { '09': 'Sep' }, { '10': 'Oct' }, { '11': 'Nov' }, { '12': 'Dec' }];
@@ -64,60 +65,63 @@ const ResourceReport = ({ fromMonth, toMonth, toYear, fromYear, setFromMonth, se
         console.log('from month async', fromMonth, fromYear, toMonth, toYear)
         const initData = await getResourceBetweenMonth(`${fromMonth}-${fromYear}`, `${toMonth}-${toYear}`);
         setData(initData);
+        setOpen(false)
     }, [isReload]);
     return (
         <>
-            {data && (<TableContainer component={Paper}>
-                <Table sx={{ minWidth: '100%' }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Employee ID</TableCell>
-                            <TableCell>Project Name</TableCell>
-                            <TableCell align="center">Month & Year</TableCell>
-                            <TableCell align="center">Actual Working Days</TableCell>
-                            <TableCell align="center">Amount</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data?.map((row) => (
+            {data && (
+                <div className={styles.reports}><TableContainer component={Paper} className={styles.table_container}>
+                    <Table sx={{ minWidth: '100%' }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Employee ID</TableCell>
+                                <TableCell>Project Name</TableCell>
+                                <TableCell align="center">Month & Year</TableCell>
+                                <TableCell align="center">Actual Working Days</TableCell>
+                                <TableCell align="center">Amount</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data?.map((row) => (
 
-                            <>
-                                <TableRow key={row?.id}>
-                                    <TableCell component="th" scope="row" style={{ paddingBottom: '1%' }}>
-                                        {row?.empNo}
-                                    </TableCell>
-                                    <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.projectName}</TableCell>
-                                    <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.month}</TableCell>
-                                    <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.actualWrkDys}</TableCell>
-                                    <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.amount ? row.amount : 'N/A'}</TableCell>
-                                </TableRow>
-                            </>
-                        ))}
-                    </TableBody>
-                </Table>
-                {/* <Pagination count={10}
-              page={currentpage}
-              onChange={(e) => { setCurrentPage(e.target.value) }} /> */}
-                <Stack direction='row' style={{
-                    marginTop: '2%',
-                    alignItems: 'center', paddingBottom: '2%', marginLeft: '1%'
-                }}>
-                    {/* <Pagination count={totalPages} color="primary" page={page} onChange={handlePage} style={{marginLeft:'50%'}}/>
-               <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={pageSize}
-          label="Page Size"
-          onChange={(e)=>handlePageSize(e)}
-          style={{marginRight:'5%'}}
-        >
-          <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={25}>25</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
-        </Select> */}
-                </Stack>
+                                <>
+                                    <TableRow key={row?.id}>
+                                        <TableCell scope="row" style={{ paddingBottom: '1%' }}>
+                                            {row?.empNo}
+                                        </TableCell>
+                                        <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.projectName}</TableCell>
+                                        <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.month}</TableCell>
+                                        <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.actualWrkDys}</TableCell>
+                                        <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.amount ? row.amount : 'N/A'}</TableCell>
+                                    </TableRow>
+                                </>
+                            ))}
+                        </TableBody>
+                    </Table>
+                    {/* <Pagination count={10}
+          page={currentpage}
+          onChange={(e) => { setCurrentPage(e.target.value) }} /> */}
+                    <Stack direction='row' style={{
+                        marginTop: '2%',
+                        alignItems: 'center', paddingBottom: '2%', marginLeft: '1%'
+                    }}>
+                        {/* <Pagination count={totalPages} color="primary" page={page} onChange={handlePage} style={{marginLeft:'50%'}}/>
+           <Select
+      labelId="demo-simple-select-label"
+      id="demo-simple-select"
+      value={pageSize}
+      label="Page Size"
+      onChange={(e)=>handlePageSize(e)}
+      style={{marginRight:'5%'}}
+    >
+      <MenuItem value={10}>10</MenuItem>
+      <MenuItem value={25}>25</MenuItem>
+      <MenuItem value={50}>50</MenuItem>
+    </Select> */}
+                    </Stack>
 
-            </TableContainer>)}</>
+                </TableContainer></div>
+            )}</>
 
     )
 
