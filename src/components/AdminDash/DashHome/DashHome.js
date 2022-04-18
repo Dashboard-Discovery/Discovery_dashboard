@@ -3,7 +3,7 @@ import Sidebar from "../../AdminDash/SideBar/Sidebar";
 import "./styles.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ResourceGrid from "../../ResourceGrid";
-import Timesheet from "../../TimeSheet/Timesheet";
+import Timesheet from "../../TimeSheet";
 import BaseBilling from "../../BaseBilling";
 import Reports from "../../Reports/Reports";
 import Projects from "../../Projects";
