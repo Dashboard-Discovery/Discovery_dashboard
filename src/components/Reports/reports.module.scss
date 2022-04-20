@@ -50,10 +50,19 @@
 }
 
 .toolbar_buttons {
-    width: 12%;
+    width: 25%;
     align-self: right;
     right: 10px;
     position: absolute;
+
+    .filter_entry {
+        background: #fff;
+
+        &:focus,
+        &:hover {
+            background-color: #fff !important;
+        }
+    }
 
     .select_drop {
         background: #fff;
