@@ -163,7 +163,7 @@ const TimeSheet = () => {
                 </TableCell>
                 <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.actualWrkDys}</TableCell>
                 <TableCell align="center" style={{ paddingBottom: '1%' }}>{row.amount ? row.amount : 'N/A'}</TableCell>
-                <TableCell align="center" style={{ paddingBottom: '1%' }}><span><EditIcon onClick={(e) => handleEditClick(row)} /> <DeleteForeverIcon onClick={(e) => handleDelete(row)} /></span></TableCell>
+                <TableCell align="center" style={{ paddingBottom: '1%' }}><span><EditIcon onClick={(e) => handleEditClick(row)} /> </span></TableCell>
               </TableRow>
             </>
           ))}
@@ -198,7 +198,7 @@ const TimeSheet = () => {
 
 
     <EditForm formType={formType} setFormType={setFormType} currentRow={currentRow} open={open} setOpen={setOpen} handleReload={handleReload} />
-    {openDelete && (<ConfirmDelete openDelete={openDelete} setOpenDelete={setOpenDelete} id={deleteId} />)}
+    {/* {openDelete && (<ConfirmDelete openDelete={openDelete} setOpenDelete={setOpenDelete} id={deleteId} />)} */}
   </div>)
 }
 
