@@ -39,7 +39,7 @@ export default function ResourceGrid() {
     const [pageSize, setPageSize] = useState(4)
 
     useEffect(async () => {
-        console.log(isReload);
+        setReload(false);
         const result = await getAllResources(pageSize, pageNumber-1);              
         setResources(result.content);
         setTotalPages(result.totalPages);
@@ -143,12 +143,14 @@ export default function ResourceGrid() {
                             <TableCell>Billing start date</TableCell>
                             <TableCell>Billing end date</TableCell>
                             <TableCell>WON</TableCell>
+                            <TableCell>Funnel</TableCell>
                             <TableCell>TEL location</TableCell>
                             <TableCell>Email</TableCell>
                             <TableCell>Mobile</TableCell>
                             <TableCell>Competency</TableCell>
                             <TableCell>Source</TableCell>
                             <TableCell>Grade</TableCell>
+                            <TableCell>Status</TableCell>
                             <TableCell>Action</TableCell>
                         </TableRow>
                     </TableHead>
@@ -166,12 +168,14 @@ export default function ResourceGrid() {
                                 <TableCell>{ConvertDate(row.billingStartDate)}</TableCell>
                                 <TableCell>{ConvertDate(row.billingEndDate)}</TableCell>
                                 <TableCell>{row.WON}</TableCell>
+                                <TableCell>{row.funnel}</TableCell>
                                 <TableCell>{row.telLocation}</TableCell>
                                 <TableCell>{row.email}</TableCell>
                                 <TableCell align="right">{row.mobile}</TableCell>
                                 <TableCell>{row.competency}</TableCell>
                                 <TableCell align="right">{row.source}</TableCell>
                                 <TableCell align="right">{row.grade}</TableCell>
+                                <TableCell>{row.status}</TableCell>
                                 <TableCell><button className='btn'><EditIcon onClick={(e) => handleEditClick(row)} /></button></TableCell>
                             </TableRow>
                         ))}

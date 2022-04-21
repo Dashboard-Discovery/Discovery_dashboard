@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { saveResource, updateResource, getAllProjects, getAllRoles, validateEmployee } from '../Service/service';
+import { saveResource, 
+  updateResource, 
+  getAllProjects, 
+  getAllRoles, 
+  validateEmployee, 
+  getAllLocations } from '../Service/service';
 
 import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
@@ -34,7 +39,8 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, setReload }) => {
   const [status, setStatus] = useState('');
   const [projectList, setProjectList] = useState([]);
   const [roleList, setRoleList] = useState([]);
-  const [errorMessage, setErrorMessage] = useState({})
+  const [errorMessage, setErrorMessage] = useState({});
+  const [telLocations, setTelLocations] = useState([]);
   const billing = ['BILLABLE', 'NONBILLABLE'];
   const statusList = ['ACTIVE', 'INACTIVE'];
 
@@ -52,7 +58,7 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, setReload }) => {
     } 
     if(!empNo || empNo == ''){
       errObj["empNo"] = "Employee number cannot be empty";
-    } else {
+    } else if(!isUpdate){
       const res = await validateEmployee(empNo);
       if (res && res.message !== 'No Items Found') {
         errObj["empNo"] = "Employee number already exists";
@@ -124,6 +130,8 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, setReload }) => {
     setProjectList(responseProject);
     const responseRole = await getAllRoles();
     setRoleList(responseRole);
+    const responseLocations = await getAllLocations();
+    setTelLocations(responseLocations);
   }, [])
 
   useEffect(() => {
@@ -252,9 +260,15 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, setReload }) => {
               <label htmlFor="funnel">Funnel</label>
             </div>
             <div className='Input'>
-              <input type="text" placeholder="TEL location" name="telLocation" defaultValue={formData?.telLocation}
-                onChange={(e) => setTelLocation(e.target.value)} />
-              <label htmlFor="telLocation">TEL location<span className={styles.asterix}>*</span></label>
+              <select type="text" placeholder="TEL location" name="telLocation" defaultValue={formData?.status || 'default'}
+                onChange={(e) => setTelLocation(e.target.value)} 
+                className= {errorMessage["telLocation"] ? styles.error: ''}>
+                <option value={'default'} disabled>Choose an option</option>
+                {telLocations && (telLocations.map((item) => {
+                  return <option key={item.location} value={item.location} selected={formData?.telLocation == item.location ? true : false}>{item.location}</option>
+                }))}
+              </select>
+              <label htmlFor="status">TEL Location<span className={styles.asterix}>*</span></label>
             </div>
             {errorMessage["telLocation"] &&
               <span className={styles.error_message}>{errorMessage["telLocation"]}</span>

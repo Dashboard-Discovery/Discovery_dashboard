@@ -18,17 +18,17 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import MenuItem from '@mui/material/MenuItem';
-import AddEditForm from './projectForm';
+import AddEditForm from './roleForm';
 import * as FileSaver from 'file-saver';
 import "jspdf-autotable";
-import { getAllProjects } from '../Service/service';
+import { getAllRoles } from '../Service/service';
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 //import DataTable from 'react-data-table-component';
 import styles from '../ResourceGrid/grid.module.scss';
 
-export default function Projects() {
-    const [projects, setProjects] = useState([]);
+export default function Roles() {
+    const [roles, setRoles] = useState([]);
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState();    
     const [isReload, setReload] = useState(false);
@@ -36,8 +36,8 @@ export default function Projects() {
 
     useEffect(async () => {
         setReload(false);
-        const result = await getAllProjects(); 
-        setProjects(result);
+        const result = await getAllRoles(); 
+        setRoles(result);
     }, [isReload]);
 
     const handleEditClick = (data) => {
@@ -53,11 +53,11 @@ export default function Projects() {
     const exportToCSV = () => {
         const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
         const fileExtension = '.xlsx';
-        const ws = XLSX.utils.json_to_sheet(projects);
+        const ws = XLSX.utils.json_to_sheet(roles);
         const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
         const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
         const data = new Blob([excelBuffer], { type: fileType });
-        FileSaver.saveAs(data, 'Projects' + fileExtension);
+        FileSaver.saveAs(data, 'Roles' + fileExtension);
     }
 
     const handleAddClick = () => {
@@ -71,7 +71,7 @@ export default function Projects() {
                 <AppBar position="static">
                     <Toolbar variant="dense">
                         <Typography variant="h6" color="inherit" component="div">
-                            Projects
+                            Roles
                         </Typography>
                         <div className={styles.toolbar_buttons}>
                             <Button variant="outlined" className={styles.add_entry} onClick={handleAddClick}>Add Entry <AddIcon /></Button>
@@ -83,7 +83,7 @@ export default function Projects() {
 
                 </AppBar>
             </Box>
-           {/* Projects Grid*/}
+           {/* Roles Grid*/}
             <TableContainer component={Paper} className={styles.table_container}>
                 <Table sx={{ minWidth: 650 }}>
                     <TableHead>
@@ -93,10 +93,10 @@ export default function Projects() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {projects && projects.map((row) => (
+                        {roles && roles.map((row) => (
                             <TableRow key={row?.id}
                             >
-                                <TableCell>{row.projectName}</TableCell>
+                                <TableCell>{row.role}</TableCell>
                                 <TableCell><button className='btn'><EditIcon onClick={(e) => handleEditClick(row)} /></button></TableCell>
                             </TableRow>
                         ))}

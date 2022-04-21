@@ -230,8 +230,6 @@ export const getAllRoles = async () => {
     });
     const data = await response.json();
     return data;
-
-
 }
 
 export const getPlannedWorkingDays = async (month, year, empNo) => {
@@ -311,7 +309,7 @@ export const validateEmployee = async (employeeNumber) => {
 export const saveProject = async (data) => {
     const tokenNow = await `Bearer ${getTokenNow()}`;
 
-    const response = await fetch(`${SERVERURL}/billing/v1/admin/project`, {
+    const response = await fetch(`http://10.75.80.111:8423/billing/v1/admin/project`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -325,8 +323,55 @@ export const saveProject = async (data) => {
 
 export const updateProject = async (data, id) => {
     const tokenNow = await `Bearer ${getTokenNow()}`;
+    const url = 'http://10.75.80.111:8423/billing/v1/admin/project/'+id;
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
 
-    const response = await fetch(`${SERVERURL}/billing/v1/admin/project/${id}`, {
+    });
+    return response.status;
+}
+
+export const getAllLocations = async () => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+
+    const response = await fetch("http://10.75.80.111:8423/billing/v1/admin/location", {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+
+    });
+    const data = await response.json();
+    return data;
+}
+
+export const saveRole = async (data) => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+
+    const response = await fetch(`http://10.75.80.111:8423/billing/v1/admin/role`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': tokenNow
+        },
+        body: JSON.stringify(data)
+    });
+    return response.status;
+}
+
+export const updateRole = async (data, id) => {
+    const tokenNow = await `Bearer ${getTokenNow()}`;
+    const url = 'http://10.75.80.111:8423/billing/v1/admin/role/'+id;
+    const response = await fetch(url, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',

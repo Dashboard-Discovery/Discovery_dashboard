@@ -7,6 +7,7 @@ import Timesheet from "../../TimeSheet";
 import BaseBilling from "../../BaseBilling";
 import Reports from "../../Reports/Reports";
 import Projects from "../../Projects";
+import Roles from "../../Roles";
 
 const DashHome = () => {
   return (
@@ -24,6 +25,7 @@ const DashHome = () => {
           <Route path="/billing"><BaseBilling /></Route>
           <Route path="/reports"><Reports /></Route>
           <Route path="/projects"><Projects /></Route>
+          <Route path="/roles"><Roles /></Route>
         </Switch>
       </div>
     </Router>
