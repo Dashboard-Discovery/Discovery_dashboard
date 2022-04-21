@@ -43,16 +43,11 @@ const BaseBilling = () => {
   useEffect(async () => {
     setReload(false);
     const data = await getBilling(page, pageSize);
-    setBillingData(data);
-    setCurrentRow(billingData[0])
-    setTotalPages(Math.ceil(billingData.length / rowsPerPage));
+    await setBillingData(data);
+    setCurrentRow(billingData[0]);
+    await setTotalPages(Math.ceil(billingData?.length / pageSize))
   }, [isReload, currentpage, currentProject, page, pageSize]);
-  useEffect(() => { }, [])
-  const onChangeHandler = (
-    event
-  ) => {
-    setCurrentPage(event.target.value);
-  };
+
   const handleEditClick = (data) => {
     setCurrentRow(data)
     setFormType('edit');
@@ -84,8 +79,9 @@ const BaseBilling = () => {
   };
   const handlePageSize = (e) => {
     setPageSize(e.target.value);
-
   }
+
+
   return (<div className={`col-10 ${styles.billing}`}>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
