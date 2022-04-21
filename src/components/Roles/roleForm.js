@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { saveProject, updateProject } from '../Service/service';
+import { saveRole, updateRole } from '../Service/service';
 
 import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
@@ -13,7 +13,7 @@ import styles from '../ResourceGrid/grid.module.scss';
 
 const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
 
-  const [projectName, setProjectName] = useState('');
+  const [role, setRole] = useState('');
   const handleClose = () => {
     setOpen(false);
   }
@@ -21,17 +21,17 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
   const handleSubmit = () => {
 
     const data = {
-      "projectName": projectName
+      "role": role
     };
 
     if (!isUpdate) {
-      const response = saveProject(data);
+      const response = saveRole(data);
       if (response === '200' || 'OK') {
         setOpen(false);
         handleReload()
       }
     } else {
-      const response = updateProject(data, formData?.id);
+      const response = updateRole(data, formData?.id);
       if (response === '200' || 'OK') {
         setOpen(false);
         handleReload();
@@ -41,7 +41,7 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
 
 
   useEffect(() => {
-    setProjectName(formData ? formData?.projectName : '');
+    setRole(formData ? formData?.role : '');
   }, [formData, open])
 
 
@@ -57,9 +57,9 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
         <div className={styles.form_wrapper}>
           <form>
             <div className='Input'>
-              <input type="text" placeholder="Project" name="Project" defaultValue={formData?.projectName}
-                onChange={(e) => setProjectName(e.target.value)} />
-              <label htmlFor="Project">Project</label>
+              <input type="text" placeholder="Role" name="Role" defaultValue={formData?.role}
+                onChange={(e) => setRole(e.target.value)} />
+              <label htmlFor="Role">Role</label>
             </div>
           </form>
         </div>

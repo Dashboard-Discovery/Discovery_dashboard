@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { saveResource, updateResource, getAllProjects, getAllRoles } from '../Service/service';
+import { saveResource, 
+  updateResource, 
+  getAllProjects, 
+  getAllRoles, 
+  validateEmployee, 
+  getAllLocations } from '../Service/service';
 
 import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
@@ -12,7 +17,7 @@ import IconButton from '@mui/material/IconButton';
 import { ConvertDate } from '../../utils/Common';
 import styles from './grid.module.scss';
 
-const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
+const AddEditForm = ({ formData, isUpdate, open, setOpen, setReload }) => {
 
   const [empNo, setEmpNo] = useState(0);
   const [projectName, setProjectName] = useState('');
@@ -33,16 +38,57 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
   const [grade, setGrade] = useState('');
   const [status, setStatus] = useState('');
   const [projectList, setProjectList] = useState([]);
-  const [roleList, setRoleList] = useState([])
+  const [roleList, setRoleList] = useState([]);
+  const [errorMessage, setErrorMessage] = useState({});
+  const [telLocations, setTelLocations] = useState([]);
   const billing = ['BILLABLE', 'NONBILLABLE'];
   const statusList = ['ACTIVE', 'INACTIVE'];
 
   const handleClose = () => {
     setOpen(false);
   }
-
-  const handleSubmit = () => {
-
+  const validateForm = async () => {
+    let errObj = {};
+    let formValid = false;
+    if(!projectName || projectName == ''){
+      errObj["projectName"] = "Project name cannot be empty";
+    }
+    if(!empName || empName == ''){
+      errObj["empName"] = "Employee name cannot be empty";
+    } 
+    if(!empNo || empNo == ''){
+      errObj["empNo"] = "Employee number cannot be empty";
+    } else if(!isUpdate){
+      const res = await validateEmployee(empNo);
+      if (res && res.message !== 'No Items Found') {
+        errObj["empNo"] = "Employee number already exists";
+      }
+    }
+    if(!role || role == ''){
+      errObj["role"] = "Role cannot be empty";
+    }
+    if(!billability || billability == ''){
+      errObj["billability"] = "Billability cannot be empty";
+    }
+    if(!telLocation || telLocation == ''){
+      errObj["telLocation"] = "Tel Location cannot be empty";
+    }
+    if(!email || email == ''){
+      errObj["email"] = "Email cannot be empty";
+    }
+    if(!status || status == ''){
+      errObj["status"] = "Status cannot be empty";
+    }   
+    setErrorMessage(errObj);   
+    console.log(errObj); 
+    if(Object.keys(errObj).length === 0) formValid = true;
+    return formValid
+  }
+  const handleSubmit = async () => {
+    if(!(await validateForm())) {
+      console.log('invalid');
+      return 
+    }
     const data = {
       "empNo": empNo,
       "projectName": projectName,
@@ -65,19 +111,17 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
     };
 
     if (!isUpdate) {
-      console.log(data, '====')
       const response = saveResource(data);
       if (response === '200' || 'OK') {
         setOpen(false);
-        handleReload()
+        setReload()
       }
     } else {
       const response = updateResource(data, formData?.id);
       if (response === '200' || 'OK') {
         setOpen(false);
-        handleReload();
+        setReload();
       }
-
     }
   }
 
@@ -86,6 +130,8 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
     setProjectList(responseProject);
     const responseRole = await getAllRoles();
     setRoleList(responseRole);
+    const responseLocations = await getAllLocations();
+    setTelLocations(responseLocations);
   }, [])
 
   useEffect(() => {
@@ -107,6 +153,7 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
     setSource(formData ? formData?.source : '');
     setGrade(formData ? formData?.grade : '');
     setStatus(formData ? formData?.status : 'ACTIVE');
+    setErrorMessage({});
   }, [formData, open])
 
 
@@ -122,37 +169,54 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
         <div className={styles.form_wrapper}>
           <form>
             <div className='Input'>
-              <select type="text" placeholder="Project" name="project" defaultValue={formData ? formData?.projectName : 'default'}
-                onChange={(e) => setProjectName(e.target.value)} >
+              <select type="text" placeholder="Project" 
+                name="project" defaultValue={formData?.projectName || 'default'}
+                className= {errorMessage["projectName"] ? styles.error: ''}
+                onChange={(e) => setProjectName(e.target.value)}  required>
                   <option value={'default'} disabled>Choose an option</option>
                 {projectList && (projectList.map((item) => {
                   return <option key={item?.id} value={item.projectName} selected={formData?.projectName == item.projectName ? true : false}>{item.projectName}</option>
                 }))}
               </select>
-              <label htmlFor="project">Project</label>
+              <label htmlFor="project">Project <span className={styles.asterix}>*</span></label>
             </div>
+            {errorMessage["projectName"] &&
+              <span className={styles.error_message}>{errorMessage["projectName"]}</span>
+            }
             <div className='Input'>
               <input type="text" placeholder="Emp Number" name="empNo" defaultValue={formData?.empNo}
+                className= {errorMessage["empNo"] ? styles.error: ''}
                 onChange={(e) => setEmpNo(e.target.value)} />
-              <label htmlFor="empNo">Employee Num</label>
+              <label htmlFor="empNo">Employee Num <span className={styles.asterix}>*</span></label>
             </div>
+            {errorMessage["empNo"] &&
+              <span className={styles.error_message}>{errorMessage["empNo"]}</span>
+            }
             <div className='Input'>
               <input type="text" placeholder="Emp Name" name="empName" defaultValue={formData?.empName}
+              className= {errorMessage["empName"] ? styles.error: ''}
                 onChange={(e) => setEmpName(e.target.value)} />
-              <label htmlFor="empName">Emp Name</label>
+              <label htmlFor="empName">Emp Name <span className={styles.asterix}>*</span></label>
             </div>
+            {errorMessage["empName"] &&
+              <span className={styles.error_message}>{errorMessage["empName"]}</span>
+            }
             <div className='Input'>
-              <select type="text" placeholder="Role" name="role" defaultValue={formData? formData.role: 'default'} 
+              <select type="text" placeholder="Role" name="role" defaultValue={formData?.role || 'default'} 
+                 className= {errorMessage["role"] ? styles.error: ''}
                 onChange={(e) => setRole(e.target.value)} >
                   <option value={'default'} disabled>Choose an option</option>
                 {roleList && (roleList.map((item) => {
                   return <option key={item?.id} value={item.role} selected={formData?.role == item.role ? true : false}>{item.role}</option>
                 }))}
               </select>
-              <label htmlFor="project">Role</label>
+              <label htmlFor="role">Role <span className={styles.asterix}>*</span></label>
             </div>
+            {errorMessage["role"] &&
+              <span className={styles.error_message}>{errorMessage["role"]}</span>
+            }
             <div className='Input'>
-              <input type="text" placeholder="Experience" name="experience" defaultValue={formData?.experience}
+              <input type="number" placeholder="Experience" name="experience" defaultValue={formData?.experience}
                 onChange={(e) => setExperience(e.target.value)} />
               <label htmlFor="Experience">Experience</label>
             </div>
@@ -162,15 +226,19 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
               <label htmlFor="skillSet">Skill Set</label>
             </div>
             <div className='Input'>
-              <select type="text" placeholder="Billability" name="billability" defaultValue={formData ? formData?.billability : 'default'}
+              <select type="text" placeholder="Billability" name="billability" defaultValue={formData?.billability || 'default'}
+                 className= {errorMessage["billability"] ? styles.error: ''}
                 onChange={(e) => setBillability(e.target.value)} >
                   <option value={'default'} disabled>Choose an option</option>
                 {billing && (billing.map((item) => {
                   return <option key={item} value={item} selected={formData?.billability == item ? true : false}>{item}</option>
                 }))}
               </select>
-              <label htmlFor="billability">Billability</label>
+              <label htmlFor="billability">Billability<span className={styles.asterix}>*</span></label>
             </div>
+            {errorMessage["billability"] &&
+              <span className={styles.error_message}>{errorMessage["billability"]}</span>
+            }
             <div className='Input'>
               <input type="date" placeholder="Billing start date" name="billingStartDate" defaultValue={ConvertDate(formData?.billingStartDate)}
                 onChange={(e) => setBillingStartDate(e.target.value)} />
@@ -182,27 +250,39 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
               <label htmlFor="billingEndDate">Billing end date</label>
             </div>
             <div className='Input'>
-              <input type="text" placeholder="WON" name="won" defaultValue={formData?.WON}
+              <input type="number" placeholder="WON" name="won" defaultValue={formData?.WON}
                 onChange={(e) => setWON(e.target.value)} />
               <label htmlFor="won">WON</label>
             </div>
             <div className='Input'>
-              <input type="text" placeholder="Funnel" name="funnel" defaultValue={formData?.setFunnel}
+              <input type="number" placeholder="Funnel" name="funnel" defaultValue={formData?.setFunnel}
                 onChange={(e) => setFunnel(e.target.value)} />
               <label htmlFor="funnel">Funnel</label>
             </div>
             <div className='Input'>
-              <input type="text" placeholder="TEL location" name="tellocation" defaultValue={formData?.telLocation}
-                onChange={(e) => setTelLocation(e.target.value)} />
-              <label htmlFor="tellocation">TEL location</label>
+              <select type="text" placeholder="TEL location" name="telLocation" defaultValue={formData?.status || 'default'}
+                onChange={(e) => setTelLocation(e.target.value)} 
+                className= {errorMessage["telLocation"] ? styles.error: ''}>
+                <option value={'default'} disabled>Choose an option</option>
+                {telLocations && (telLocations.map((item) => {
+                  return <option key={item.location} value={item.location} selected={formData?.telLocation == item.location ? true : false}>{item.location}</option>
+                }))}
+              </select>
+              <label htmlFor="status">TEL Location<span className={styles.asterix}>*</span></label>
             </div>
+            {errorMessage["telLocation"] &&
+              <span className={styles.error_message}>{errorMessage["telLocation"]}</span>
+            }
             <div className='Input'>
               <input type="email" placeholder="Email" name="email" defaultValue={formData?.email}
                 onChange={(e) => setEmail(e.target.value)} />
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Email<span className={styles.asterix}>*</span></label>
             </div>
+            {errorMessage["email"] &&
+              <span className={styles.error_message}>{errorMessage["email"]}</span>
+            }
             <div className='Input'>
-              <input type="text" placeholder="Mobile" name="mobile" defaultValue={formData?.mobile}
+              <input type="number" placeholder="Mobile" name="mobile" defaultValue={formData?.mobile}
                 onChange={(e) => setMobile(e.target.value)} />
               <label htmlFor="mobile">Mobile</label>
             </div>
@@ -222,15 +302,19 @@ const AddEditForm = ({ formData, isUpdate, open, setOpen, handleReload }) => {
               <label htmlFor="grade">Grade</label>
             </div>
             <div className='Input'>
-              <select type="text" placeholder="Status" name="status" defaultValue={formData ? formData?.status : 'default'}
-                onChange={(e) => setStatus(e.target.value)} >
+              <select type="text" placeholder="Status" name="status" defaultValue={formData?.status || 'default'}
+                onChange={(e) => setStatus(e.target.value)} 
+                className= {errorMessage["status"] ? styles.error: ''}>
                 <option value={'default'} disabled>Choose an option</option>
                 {statusList && (statusList.map((item) => {
                   return <option key={item} value={item} selected={formData?.status == item ? true : false}>{item}</option>
                 }))}
               </select>
-              <label htmlFor="status">Status</label>
+              <label htmlFor="status">Status<span className={styles.asterix}>*</span></label>
             </div>
+            {errorMessage["status"] &&
+              <span className={styles.error_message}>{errorMessage["status"]}</span>
+            }
           </form>
         </div>
       </DialogContent>

@@ -49,6 +49,12 @@ import {
                   <div>Projects</div>
                 </ListItem>
               </Link>
+              <Link to="roles">
+                <ListItem>
+                  <SummarizeIcon className="icon" />
+                  <div>Roles</div>
+                </ListItem>
+              </Link>
               <Link to="/reports">
                 <ListItem>
                   <SummarizeIcon className="icon" />

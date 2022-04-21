@@ -39,11 +39,12 @@ export default function ResourceGrid() {
     const [pageSize, setPageSize] = useState(4)
 
     useEffect(async () => {
-        const result = await getAllResources(pageSize, pageNumber-1);        
+        setReload(false);
+        const result = await getAllResources(pageSize, pageNumber-1);              
         setResources(result.content);
         setTotalPages(result.totalPages);
         setTotalRecords(result.totalElements);
-    }, [isReload, pageNumber,pageSize]);
+    }, [isReload,pageNumber,pageSize]);
 
     const handlePageNum = (event, value) => {
         setPageNumber(value);
@@ -91,7 +92,7 @@ export default function ResourceGrid() {
     }
 
     const handleReload = () => {
-        setReload(true);
+        setReload(!isReload);
     }
 
     const exportToCSV = () => {
@@ -142,12 +143,14 @@ export default function ResourceGrid() {
                             <TableCell>Billing start date</TableCell>
                             <TableCell>Billing end date</TableCell>
                             <TableCell>WON</TableCell>
+                            <TableCell>Funnel</TableCell>
                             <TableCell>TEL location</TableCell>
                             <TableCell>Email</TableCell>
                             <TableCell>Mobile</TableCell>
                             <TableCell>Competency</TableCell>
                             <TableCell>Source</TableCell>
                             <TableCell>Grade</TableCell>
+                            <TableCell>Status</TableCell>
                             <TableCell>Action</TableCell>
                         </TableRow>
                     </TableHead>
@@ -165,12 +168,14 @@ export default function ResourceGrid() {
                                 <TableCell>{ConvertDate(row.billingStartDate)}</TableCell>
                                 <TableCell>{ConvertDate(row.billingEndDate)}</TableCell>
                                 <TableCell>{row.WON}</TableCell>
+                                <TableCell>{row.funnel}</TableCell>
                                 <TableCell>{row.telLocation}</TableCell>
                                 <TableCell>{row.email}</TableCell>
                                 <TableCell align="right">{row.mobile}</TableCell>
                                 <TableCell>{row.competency}</TableCell>
                                 <TableCell align="right">{row.source}</TableCell>
                                 <TableCell align="right">{row.grade}</TableCell>
+                                <TableCell>{row.status}</TableCell>
                                 <TableCell><button className='btn'><EditIcon onClick={(e) => handleEditClick(row)} /></button></TableCell>
                             </TableRow>
                         ))}
@@ -191,11 +196,10 @@ export default function ResourceGrid() {
                     >
                         <MenuItem value={4}>4</MenuItem>
                         <MenuItem value={8}>8</MenuItem>
-                        <MenuItem value={50}>50</MenuItem>
                     </Select>
                 </Stack>
             </TableContainer>
-            <AddEditForm formData={(isUpdate && selected) ? selected : undefined} isUpdate={isUpdate} open={open} setOpen={setOpen} handleReload={handleReload} />
+            <AddEditForm formData={(isUpdate && selected) ? selected : undefined} isUpdate={isUpdate} open={open} setOpen={setOpen} setReload={handleReload} />
 
         </div>
     );
