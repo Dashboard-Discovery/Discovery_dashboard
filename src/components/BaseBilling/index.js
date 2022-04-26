@@ -40,12 +40,16 @@ const BaseBilling = () => {
   const [currentProject, setCurrentProject] = useState('ALL PROJECTS');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  useEffect(async () => {
-    setReload(false);
-    const data = await getBilling(page, pageSize);
-    await setBillingData(data);
-    setCurrentRow(billingData[0]);
-    await setTotalPages(Math.ceil(billingData?.length / pageSize))
+  useEffect(() => {
+
+    (async () => {
+      setReload(false);
+      const data = await getBilling(page, pageSize);
+      await setBillingData(data);
+      await setCurrentRow(billingData[0]);
+      setTotalPages(Math.ceil(billingData?.length / pageSize))
+    })()
+
   }, [isReload, currentpage, currentProject, page, pageSize]);
 
   const handleEditClick = (data) => {
@@ -61,9 +65,12 @@ const BaseBilling = () => {
   const handleReload = () => {
     setReload(true);
   }
-  useEffect(async () => {
-    const responseProject = await getAllProjects();
-    setProjectList(responseProject);
+  useEffect(() => {
+    (async () => {
+      const responseProject = await getAllProjects();
+      setProjectList(responseProject);
+    })()
+
   }, [])
   const exportToCSV = () => {
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
