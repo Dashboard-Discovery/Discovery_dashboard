@@ -34,12 +34,15 @@ const BillingForm = ({ row, formType, open, setOpen, setFormType, handleReload }
     }
 
 
-  }, [row, open])
-  useEffect(async () => {
-    const responseProject = await getAllProjects();
-    setProjectList(responseProject);
-    const responseRole = await getAllRoles();
-    setRoleList(responseRole);
+  }, [row, open, formType])
+  useEffect(() => {
+    (async () => {
+      const responseProject = await getAllProjects();
+      setProjectList(responseProject);
+      const responseRole = await getAllRoles();
+      setRoleList(responseRole);
+    })()
+
   }, [])
 
   const handleSaveOrUpdate = async () => {
@@ -92,7 +95,7 @@ const BillingForm = ({ row, formType, open, setOpen, setFormType, handleReload }
               <label htmlFor="project">Role</label>
             </div>
             <div className='Input'>
-              <input type="number" placeholder="Rate/Hour" name="amount" defaultValue={row?.amount}
+              <input type="number" placeholder="Rate/Hour" name="amount" value={amount}
                 onChange={(e) => setAmount(e.target.value)} />
               <label htmlFor="empNo">Rate/Hour</label>
             </div>
